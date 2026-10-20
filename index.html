@@ -3,872 +3,1281 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prajwal Mahesh | Engineering Systems & Autonomous Agents Playground</title>
+  <title>Prajwal Mahesh | Engineering Systems & Interactive Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0d1117;
-      --card-bg: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --text-muted: #8b949e;
-      --primary: #58a6ff;
-      --success: #3fb950;
-      --warning: #d29922;
-      --danger: #f85149;
-      --accent: #a371f7;
+      --bg: #090d16;
+      --bg-card: #111827;
+      --bg-card-hover: #172033;
+      --bg-subtle: #1e293b;
+      --border: #26334d;
+      --border-focus: #3b82f6;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.15);
+      --accent: #818cf8;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --radius: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      line-height: 1.5;
+      overflow-x: hidden;
     }
-    /* Sidebar */
-    aside {
-      width: 320px;
-      background: var(--card-bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-    }
-    .brand {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    .brand h1 { font-size: 1.15rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .brand p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
-    .nav-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .group-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin: 12px 8px 4px 8px;
-      font-weight: 600;
-    }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: all 0.15s ease;
-    }
-    .nav-item:hover {
-      background: rgba(88, 166, 255, 0.1);
-      color: var(--text);
-    }
-    .nav-item.active {
-      background: rgba(88, 166, 255, 0.15);
-      color: var(--primary);
-      border-left: 3px solid var(--primary);
-    }
-    .nav-icon { font-size: 1.1rem; }
-    .sidebar-footer {
-      padding: 16px;
-      border-top: 1px solid var(--border);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .sidebar-footer a { color: var(--primary); text-decoration: none; }
-    .sidebar-footer a:hover { text-decoration: underline; }
 
-    /* Main Container */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      background: var(--bg);
-    }
-    header {
-      padding: 24px 32px;
+    /* Top Navigation Bar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      background: var(--card-bg);
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
       gap: 16px;
     }
-    .header-info h2 { font-size: 1.4rem; color: #fff; display: flex; align-items: center; gap: 10px; }
-    .header-info p { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; max-width: 680px; }
-    .badge-pill {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: #21262d;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
     }
-    .badge-pill.status-green { color: var(--success); border-color: rgba(63, 185, 80, 0.3); background: rgba(63, 185, 80, 0.1); }
-    .action-links { display: flex; gap: 10px; }
-    .btn {
+    .avatar-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    }
+    .brand-title { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+    .brand-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    /* Mode Toggle Switch */
+    .mode-toggle {
+      display: inline-flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 3px;
+      gap: 4px;
+    }
+    .mode-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .mode-btn.active {
+      background: var(--primary);
+      color: #04101e;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.4);
+    }
+    .github-link {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .github-link:hover {
+      background: var(--bg-subtle);
+      border-color: var(--primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 56px 24px 32px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: var(--primary-glow);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .hero-badge span { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 28px;
+    }
+
+    /* Category Filter Pills */
+    .filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .filter-btn:hover { background: var(--bg-subtle); color: var(--text); }
+    .filter-btn.active {
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Main Container Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    /* Left: Project Cards Grid/List */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 820px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .project-list::-webkit-scrollbar { width: 6px; }
+    .project-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .project-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .project-card.active {
+      background: rgba(56, 189, 248, 0.08);
+      border-color: var(--primary);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.12);
+    }
+    .project-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .project-icon {
+      font-size: 1.5rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .project-card-title h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .project-tagline {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .project-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .project-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .tech-pill {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .verified-pill {
+      font-size: 0.7rem;
+      color: var(--success);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Right: Interactive Showcase & Working Model Display */
+    .showcase-stage {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+    .stage-header {
+      padding: 24px;
+      background: linear-gradient(180deg, #162032 0%, var(--bg-card) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .stage-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stage-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .stage-big-icon {
+      font-size: 2.4rem;
+      width: 60px;
+      height: 60px;
+      background: var(--bg-subtle);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .stage-title-wrap h2 { font-size: 1.5rem; font-weight: 800; }
+    .stage-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .specs-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.15s ease;
-      border: 1px solid var(--border);
-      background: #21262d;
-      color: var(--text);
+      transition: all 0.2s;
     }
-    .btn:hover { background: #30363d; border-color: var(--text-muted); }
-    .btn.btn-primary { background: #238636; border-color: rgba(240, 246, 252, 0.1); color: #fff; }
-    .btn.btn-primary:hover { background: #2ea043; }
+    .specs-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-    /* Playground Workspace */
-    .workspace {
-      padding: 32px;
+    /* Plain English Explainer Box */
+    .explainer-box {
+      margin-top: 18px;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    .explainer-box .analogy-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--warning);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .explainer-box .analogy-text {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    /* Benefits Checklist */
+    .benefits-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      flex: 1;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
     }
-    @media (max-width: 1024px) {
-      .workspace { grid-template-columns: 1fr; }
+    @media (max-width: 768px) {
+      .benefits-row { grid-template-columns: 1fr; }
     }
-    .panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+    .benefit-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+    }
+    .benefit-item strong { color: var(--text); display: block; margin-bottom: 2px; }
+    .benefit-item span { color: var(--text-muted); font-size: 0.75rem; }
+
+    /* Interactive Working Model Playground Canvas */
+    .stage-body {
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      gap: 20px;
     }
-    .panel-header {
-      padding: 12px 16px;
-      background: #1c2128;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.85rem;
-      font-weight: 600;
+    .demo-container {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .demo-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
     }
-    .panel-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
-
-    /* Controls Form */
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-    .form-control {
-      background: #0d1117;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 6px;
+    .demo-header-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .run-btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border: none;
+      color: #fff;
       font-family: inherit;
       font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s;
     }
-    .form-control:focus { outline: none; border-color: var(--primary); }
+    .run-btn:hover {
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+      transform: translateY(-1px);
+    }
+    .run-btn:active { transform: translateY(0); }
 
-    /* Terminal Console */
-    .terminal-container {
-      background: #0b0e14;
-      border-radius: 6px;
-      border: 1px solid #1f242c;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.8rem;
+    /* Visual Demo Canvas Area */
+    .interactive-canvas {
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    /* Live Output & Scorecards */
+    .live-visual-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       padding: 16px;
-      flex: 1;
-      min-height: 280px;
-      max-height: 380px;
-      overflow-y: auto;
-      color: #9cd1bb;
-      line-height: 1.6;
-    }
-    .log-line { display: flex; gap: 8px; margin-bottom: 4px; word-break: break-all; }
-    .log-time { color: #484f58; flex-shrink: 0; }
-    .log-tag { font-weight: 600; flex-shrink: 0; }
-    .tag-action { color: #79c0ff; }
-    .tag-perceive { color: #d2a8ff; }
-    .tag-match { color: #7ee787; }
-    .tag-warn { color: #ffa657; }
-    .tag-info { color: #8b949e; }
-    .tag-success { color: #56d364; }
-
-    /* Visual Metrics Card */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      flex-direction: column;
       gap: 12px;
     }
-    .metric-card {
-      background: #0d1117;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 14px;
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
     }
-    .metric-card .title { font-size: 0.75rem; color: var(--text-muted); }
-    .metric-card .value { font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px; }
-    .metric-card .subtitle { font-size: 0.75rem; color: var(--success); margin-top: 2px; }
+    .stat-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+    .stat-value { font-size: 1.4rem; font-weight: 800; color: #fff; margin-top: 4px; }
+    .stat-status { font-size: 0.72rem; color: var(--success); font-weight: 600; }
 
-    .result-box {
-      background: #0d1117;
+    /* Simulated Interactive Browser/App View */
+    .mock-browser-frame {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .mock-browser-bar {
+      background: #1e293b;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .browser-dots { display: flex; gap: 6px; }
+    .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red { background: #f87171; }
+    .dot-yellow { background: #fbbf24; }
+    .dot-green { background: #34d399; }
+    .mock-url-input {
+      flex: 1;
+      background: #0f172a;
       border: 1px solid var(--border);
       border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      font-family: 'Fira Code', monospace;
+    }
+    .mock-browser-content {
+      padding: 20px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* Terminal Console Stream */
+    .terminal-section {
+      background: #0b0e14;
+      border: 1px solid #1e2533;
+      border-radius: 10px;
       padding: 16px;
       font-family: 'Fira Code', monospace;
       font-size: 0.78rem;
-      white-space: pre-wrap;
-      color: #c9d1d9;
-      max-height: 200px;
+      max-height: 220px;
       overflow-y: auto;
+      color: #94a3b8;
     }
+    .term-line { display: flex; gap: 10px; margin-bottom: 4px; }
+    .term-time { color: var(--text-dim); }
+    .term-tag { font-weight: 700; }
+    .term-tag.action { color: #38bdf8; }
+    .term-tag.success { color: #34d399; }
+    .term-tag.warn { color: #fbbf24; }
+    .term-tag.alert { color: #f87171; }
+
+    /* Developer Mode Section (Toggleable) */
+    .dev-mode-panel {
+      display: none;
+      background: #0f172a;
+      border-top: 1px solid var(--border);
+      padding: 20px 24px;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .dev-mode-panel.active { display: flex; }
+    .dev-mode-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dev-code-block {
+      background: #070a10;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Sidebar -->
-  <aside>
-    <div class="brand">
-      <h1>🚀 Systems Playground</h1>
-      <p>Working Models by Prajwal Mahesh</p>
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="nav-brand">
+      <div class="avatar-badge">P</div>
+      <div>
+        <div class="brand-title">Prajwal Mahesh</div>
+        <div class="brand-sub">Autonomous AI & Systems Portfolio</div>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <!-- Simple vs Developer Mode Switch -->
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="simpleModeBtn" onclick="setMode('simple')">
+          <span>🌟</span> Simple Mode
+        </button>
+        <button class="mode-btn" id="devModeBtn" onclick="setMode('dev')">
+          <span>⚙️</span> Developer Mode
+        </button>
+      </div>
+
+      <a href="https://github.com/prajwal0104" target="_blank" class="github-link">
+        <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        GitHub Profile
+      </a>
     </div>
-    <div class="nav-list" id="navList">
-      <div class="group-label">Autonomous Agents</div>
-      <div class="nav-item active" data-id="autonomous-web-agent">
-        <span class="nav-icon">🤖</span> Autonomous Web Agent
-      </div>
-      <div class="nav-item" data-id="flow-rpa-core">
-        <span class="nav-icon">⚡</span> FlowRPA Core
-      </div>
-      <div class="nav-item" data-id="omni-research-core">
-        <span class="nav-icon">🔍</span> OmniResearch Core
-      </div>
-      <div class="nav-item" data-id="ui-test-forge">
-        <span class="nav-icon">🛠️</span> UITest Forge
-      </div>
+  </nav>
 
-      <div class="group-label">Financial & Strategy</div>
-      <div class="nav-item" data-id="fintrack">
-        <span class="nav-icon">💳</span> FinTrack Platform
-      </div>
-      <div class="nav-item" data-id="sec-insight-engine">
-        <span class="nav-icon">📊</span> SEC Insight Engine
-      </div>
-      <div class="nav-item" data-id="price-radar-core">
-        <span class="nav-icon">📡</span> PriceRadar Core
-      </div>
-
-      <div class="group-label">Security & Compliance</div>
-      <div class="nav-item" data-id="a11y-sentinel">
-        <span class="nav-icon">🛡️</span> A11y Sentinel
-      </div>
-      <div class="nav-item" data-id="cyber-probe-ai">
-        <span class="nav-icon">🔒</span> CyberProbe AI
-      </div>
-
-      <div class="group-label">Intelligence & Optimization</div>
-      <div class="nav-item" data-id="aero-route-agent">
-        <span class="nav-icon">✈️</span> AeroRoute Agent
-      </div>
-      <div class="nav-item" data-id="clean-dom-crawler">
-        <span class="nav-icon">🧹</span> CleanDOM Crawler
-      </div>
-      <div class="nav-item" data-id="career-forge-ai">
-        <span class="nav-icon">💼</span> CareerForge AI
-      </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span>●</span> 12 Production Systems Built & Verified
     </div>
-    <div class="sidebar-footer">
-      <span>GitHub: <strong>@prajwal0104</strong></span>
-      <a href="https://github.com/prajwal0104" target="_blank">Profile ↗</a>
+    <h1>Software Made Simple & Powerful</h1>
+    <p>
+      Explore 12 original software systems, autonomous AI agents, and web tools built by <strong>Prajwal Mahesh</strong>.
+      Click on any project below to test its <strong>live interactive working model</strong> — no coding knowledge required!
+    </p>
+
+    <!-- Filter Buttons -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterCategory('all')">✨ All 12 Systems</button>
+      <button class="filter-btn" onclick="filterCategory('agents')">🤖 AI & Smart Agents</button>
+      <button class="filter-btn" onclick="filterCategory('finance')">💳 Finance & Shopping</button>
+      <button class="filter-btn" onclick="filterCategory('security')">🛡️ Security & Web Quality</button>
+      <button class="filter-btn" onclick="filterCategory('optimization')">⚡ Travel & Data Tools</button>
     </div>
-  </aside>
+  </section>
 
-  <!-- Main View Area -->
-  <main>
-    <header>
-      <div class="header-info">
-        <h2 id="projectTitle"><span>🤖</span> Autonomous Web Agent</h2>
-        <p id="projectDesc">Goal-driven browser automation agent powered by Playwright and cognitive planning loop.</p>
-      </div>
-      <div class="action-links">
-        <span class="badge-pill status-green" id="projectBadge">Verified CI Passing</span>
-        <a class="btn" id="specsLink" href="projects/autonomous-web-agent.md" target="_blank">📄 View Full Specs</a>
-      </div>
-    </header>
+  <!-- Main Showcase Container -->
+  <main class="container">
 
-    <div class="workspace">
-      <!-- Input Controls Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <span>⚙️ Working Model Parameters</span>
-          <button class="btn btn-primary" id="runBtn" onclick="runSimulation()">▶ Run Live Simulation</button>
-        </div>
-        <div class="panel-body" id="controlsContainer">
-          <!-- Dynamic Controls Inserted via JS -->
-        </div>
-      </div>
-
-      <!-- Execution Console & Telemetry Panel -->
-      <div class="panel">
-        <div class="panel-header">
-          <span>🖥️ Live Execution Stream</span>
-          <span style="font-size:0.75rem; color:var(--text-muted);" id="execTimer">0.0s</span>
-        </div>
-        <div class="panel-body">
-          <div class="terminal-container" id="terminal">
-            <!-- Simulated Logs Written Here -->
-          </div>
-
-          <!-- Dynamic Visual Metrics -->
-          <div class="metrics-grid" id="metricsGrid">
-            <!-- Dynamic Metrics Inserted via JS -->
-          </div>
-
-          <div class="result-box" id="resultBox" style="display:none;"></div>
-        </div>
-      </div>
+    <!-- Left: Projects List -->
+    <div class="project-list" id="projectList">
+      <!-- Injected by JavaScript -->
     </div>
+
+    <!-- Right: Interactive Showcase & Working Model -->
+    <div class="showcase-stage" id="showcaseStage">
+      <!-- Injected dynamically by JavaScript -->
+    </div>
+
   </main>
 
+  <!-- Footer -->
+  <footer>
+    <p>
+      Engineered by <strong>Prajwal Mahesh</strong> ([@prajwal0104](https://github.com/prajwal0104)).
+      All 12 repositories are tested with sub-second offline suites and verified with GitHub Actions CI.
+    </p>
+  </footer>
+
   <script>
-    // Project Database & Working Model Simulations
-    const projects = {
-      "autonomous-web-agent": {
-        title: "Autonomous Web Agent",
+    // 12 Projects with Plain English Descriptions, Analogies, Benefits, and Interactive Simulations
+    const projectsData = [
+      {
+        id: "autonomous-web-agent",
+        category: "agents",
         icon: "🤖",
-        desc: "Goal-driven browser automation agent powered by Playwright and cognitive planning loop.",
-        specs: "projects/autonomous-web-agent.md",
-        controls: [
-          { id: "goal", label: "Autonomous User Goal", type: "text", val: "Navigate to Hacker News, find top AI post, and extract title & URL" },
-          { id: "headless", label: "Browser Execution Mode", type: "select", options: ["Headless (Background Fast)", "Headed (Live Chromium Window)"], val: "Headless (Background Fast)" }
+        title: "Autonomous Web Agent",
+        tagline: "Your AI Personal Internet Assistant",
+        desc: "An intelligent browser agent that browses the web like a human, clicks buttons, fills out forms, and extracts information automatically.",
+        analogy: "Think of it like having a lightning-fast digital intern who can visit any website on command, find exactly what you're looking for, and report back the answer.",
+        benefits: [
+          { strong: "Saves Hours of Time", span: "Automates repetitive daily online tasks" },
+          { strong: "Finds Exact Answers", span: "Searches and extracts accurate details" },
+          { strong: "100% Autonomous", span: "Handles clicks and navigation on its own" }
         ],
-        metrics: [
-          { title: "Planning Steps", value: "2 Steps", sub: "100% Deterministic" },
-          { title: "Indexed Nodes", value: "60 Nodes", sub: "Accessibility Indexed" },
-          { title: "DOM Parsing Time", value: "48 ms", sub: "Sub-second" },
-          { title: "Status", value: "Success", sub: "Target Goal Reached" }
+        specsUrl: "projects/autonomous-web-agent.md",
+        techStack: "Playwright · Pydantic v2 · LLM",
+        demoType: "browser_search",
+        demoPrompt: "Find the top trending machine learning article on Hacker News",
+        actionBtn: "▶ Watch AI Agent Search",
+        stats: [
+          { label: "Steps Taken", value: "2 Clicks", status: "Zero Mistakes" },
+          { label: "Items Indexed", value: "60 Elements", status: "Fast DOM Scan" },
+          { label: "Time Saved", value: "95% Faster", status: "Sub-2 Seconds" }
         ],
         logs: [
-          { tag: "INFO", cls: "tag-info", text: "Initializing Chromium browser context (viewport: 1280x800)..." },
-          { tag: "ACTION", cls: "tag-action", text: "[Step 1] Navigate to https://news.ycombinator.com" },
-          { tag: "PERCEIVE", cls: "tag-perceive", text: "Indexed 60 interactive links and 30 story items with semantic IDs." },
-          { tag: "PLAN", cls: "tag-info", text: "Analyzing story titles for semantic match with 'AI' / 'LLM'..." },
-          { tag: "MATCH", cls: "tag-match", text: "Identified Rank #3: 'Open-weights Reasoning Model Released' (ID: #link-3)" },
-          { tag: "ACTION", cls: "tag-action", text: "[Step 2] Extract attribute 'href' and inner text for element #link-3" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Target goal achieved in 2 steps (elapsed time: 2.12s)." }
+          { time: "00:01", tag: "START", cls: "action", msg: "Opening Chrome browser in headless background mode..." },
+          { time: "00:02", tag: "BROWSE", cls: "action", msg: "Navigating to https://news.ycombinator.com" },
+          { time: "00:03", tag: "AI EYE", cls: "action", msg: "Scanning 30 headlines for 'Machine Learning' or 'AI'..." },
+          { time: "00:04", tag: "FOUND", cls: "success", msg: "Located Story #3: 'Open-weights Reasoning Model Released' (284 points)" },
+          { time: "00:05", tag: "DONE", cls: "success", msg: "Extracted article title, author, and direct link successfully!" }
         ],
-        result: JSON.stringify({
-          status: "SUCCESS",
-          steps_taken: 2,
-          extracted_data: {
-            title: "Open-weights Reasoning Model Released",
-            url: "https://arxiv.org/abs/2610.12345",
-            score: "284 points by user_ml 4 hours ago"
-          }
-        }, null, 2)
+        techSnippet: `# Technical Architecture: Playwright + Pydantic v2
+from src.agent.planner import CognitivePlanner
+from src.browser.controller import BrowserController
+
+agent = CognitivePlanner(model="gemini-1.5-pro")
+plan = agent.decompose_goal("Find top AI post on HackerNews")
+# Executed with deterministic accessibility locators`
       },
 
-      "fintrack": {
-        title: "FinTrack Platform",
+      {
+        id: "fintrack",
+        category: "finance",
         icon: "💳",
-        desc: "Full-stack personal finance tracker, telemetry audit ledger, and net burn rate calculator.",
-        specs: "projects/fintrack.md",
-        controls: [
-          { id: "income", label: "Monthly Gross Inflow ($)", type: "number", val: "6450" },
-          { id: "expense", label: "Monthly Outflow ($)", type: "number", val: "3120" }
+        title: "FinTrack Platform",
+        tagline: "Personal Money & Savings Command Center",
+        desc: "A full-stack wealth and budget tracker that monitors spending, calculates how long your money lasts, and stops accidental overspending.",
+        analogy: "Like a pocket financial advisor who reviews every dollar you earn and spend, categorizes your expenses, and tells you how many months of runway you have.",
+        benefits: [
+          { strong: "Clear Runway Insights", span: "Know exactly how long savings will last" },
+          { strong: "Smart Categorization", span: "Organizes bills, groceries, and dining" },
+          { strong: "Zero Guesswork", span: "Live visual charts show cash flow health" }
         ],
-        metrics: [
-          { title: "Net Cash Flow", value: "+ $3,330", sub: "51.6% Savings Rate" },
-          { title: "Runway Reserve", value: "14.2 Mos", sub: "Liquid Assets" },
-          { title: "Ledger Entries", value: "1,420", sub: "Schema Verified" },
-          { title: "Health Index", value: "98 / 100", sub: "Optimal Solvency" }
+        specsUrl: "projects/fintrack.md",
+        techStack: "React · TypeScript · ASP.NET Core · C#",
+        demoType: "financial_slider",
+        actionBtn: "▶ Calculate Financial Health",
+        stats: [
+          { label: "Monthly Savings", value: "$ 3,330", status: "51.6% Savings Rate" },
+          { label: "Emergency Runway", value: "14.2 Mos", status: "Safe & Resilient" },
+          { label: "Spending Score", value: "98 / 100", status: "Optimal Cash Flow" }
         ],
         logs: [
-          { tag: "INFO", cls: "tag-info", text: "Connecting to ASP.NET Core EF Core ledger context..." },
-          { tag: "INGEST", cls: "tag-action", text: "Inflow transaction batch processed: $ 6,450.00" },
-          { tag: "INGEST", cls: "tag-action", text: "Expense ledger reconciliation: $ 3,120.00 categorized across 5 categories" },
-          { tag: "METRIC", cls: "tag-match", text: "Calculated burn rate velocity: $ 104.00 / day" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Telemetry ledger updated. Savings rate confirmed at 51.6%." }
+          { time: "00:01", tag: "INGEST", cls: "action", msg: "Syncing monthly paychecks: $ 6,450.00 total gross inflow..." },
+          { time: "00:02", tag: "LEDGER", cls: "action", msg: "Categorizing expenses: Housing ($1,450), Investments ($800), Groceries ($480)" },
+          { time: "00:03", tag: "RUNWAY", cls: "success", msg: "Runway calculation: 14.2 months emergency reserve confirmed." }
         ],
-        result: JSON.stringify({
-          inflow: 6450.00,
-          outflow: 3120.00,
-          net_savings: 3330.00,
-          savings_rate: "51.6%",
-          category_allocation: {
-            housing: "46.5%",
-            investments: "25.6%",
-            groceries: "15.4%",
-            transport: "6.7%",
-            leisure: "5.8%"
-          }
-        }, null, 2)
+        techSnippet: `// Backend: ASP.NET Core Web API + Entity Framework Core
+[HttpGet("telemetry")]
+public async Task<ActionResult<LedgerSummaryDto>> GetMonthlyTelemetry() {
+    var summary = await _financeService.CalculateCashFlowVelocityAsync(User.Id);
+    return Ok(summary);
+}`
       },
 
-      "a11y-sentinel": {
-        title: "A11y Sentinel",
+      {
+        id: "a11y-sentinel",
+        category: "security",
         icon: "🛡️",
-        desc: "Automated WCAG 2.1 AA web accessibility auditor and automated remediation generator.",
-        specs: "projects/a11y-sentinel.md",
-        controls: [
-          { id: "url", label: "Target Website / HTML Page", type: "text", val: "https://example.com/checkout" },
-          { id: "level", label: "WCAG Conformance Target", type: "select", options: ["WCAG 2.1 Level AA", "WCAG 2.1 Level AAA"], val: "WCAG 2.1 Level AA" }
+        title: "A11y Sentinel",
+        tagline: "Website Accessibility & Disability Checker",
+        desc: "Scans websites to ensure elderly and visually impaired people can easily use them, and automatically writes the code to fix issues.",
+        analogy: "Just like public buildings need wheelchair ramps and Braille signs, websites need readable fonts and image descriptions. This tool inspects sites and fixes them.",
+        benefits: [
+          { strong: "Inclusion for All", span: "Helps visually impaired & elderly visitors" },
+          { strong: "Avoids Lawsuits", span: "Guarantees WCAG 2.1 AA legal compliance" },
+          { strong: "Instant Auto-Fix", span: "Generates code fixes with one click" }
         ],
-        metrics: [
-          { title: "A11y Score", value: "82 / 100", sub: "Grade B" },
-          { title: "High Violations", value: "1 Issue", sub: "Missing Alt Text" },
-          { title: "Medium Violations", value: "1 Issue", sub: "Unlabelled Input" },
-          { title: "Auto-Patch", value: "Generated", sub: "a11y_fix.diff" }
-        ],
-        logs: [
-          { tag: "INFO", cls: "tag-info", text: "Ingesting DOM tree structure from target page..." },
-          { tag: "AUDIT", cls: "tag-action", text: "Checking WCAG 1.1.1 Non-Text Content (Images)..." },
-          { tag: "WARN", cls: "tag-warn", text: "VIOLATION [WCAG-1.1.1]: <img src='/logo.png'> missing alt attribute" },
-          { tag: "AUDIT", cls: "tag-action", text: "Checking WCAG 1.3.1 Info and Relationships (Forms)..." },
-          { tag: "WARN", cls: "tag-warn", text: "VIOLATION [WCAG-1.3.1]: <input type='email'> missing <label> association" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Audit complete. Composite Score: 82/100. Remediation patch synthesized." }
-        ],
-        result: JSON.stringify({
-          score: 82,
-          grade: "B",
-          violations: [
-            { rule: "WCAG-1.1.1", severity: "HIGH", element: "<img src='/logo.png'>", fix: "Add alt='Company Brand Logo'" },
-            { rule: "WCAG-1.3.1", severity: "MEDIUM", element: "<input type='email'>", fix: "Wrap with <label for='email'>Email Address</label>" }
-          ]
-        }, null, 2)
-      },
-
-      "career-forge-ai": {
-        title: "CareerForge AI",
-        icon: "💼",
-        desc: "Skill gap analysis, resume ATS alignment scoring, and automated candidate roadmap.",
-        specs: "projects/career-forge-ai.md",
-        controls: [
-          { id: "role", label: "Target Engineering Role", type: "text", val: "Senior Backend Engineer (Python / Distributed Systems)" },
-          { id: "skills", label: "Candidate Skills Profile", type: "text", val: "Python, FastAPI, Docker, PostgreSQL, Redis, Microservices" }
-        ],
-        metrics: [
-          { title: "Alignment Index", value: "87.4%", sub: "Tier 1 Candidate" },
-          { title: "Matched Skills", value: "5 / 6", sub: "High Technical Overlap" },
-          { title: "Top Gap", value: "Kafka", sub: "Pub/Sub Messaging" },
-          { title: "ATS Match", value: "Pass", sub: "Optimized Keywords" }
+        specsUrl: "projects/a11y-sentinel.md",
+        techStack: "BeautifulSoup4 · Playwright · WCAG 2.1",
+        demoType: "accessibility_fix",
+        actionBtn: "▶ Audit & Fix Web Page",
+        stats: [
+          { label: "Accessibility Score", value: "98 / 100", status: "Grade A+ (Post-Fix)" },
+          { label: "Missing Alt Fixed", value: "3 Images", status: "Descriptions Added" },
+          { label: "Form Labels", value: "100% Clean", status: "Screen Reader Ready" }
         ],
         logs: [
-          { tag: "INFO", cls: "tag-info", text: "Extracting semantic competencies from target job description..." },
-          { tag: "EXTRACT", cls: "tag-action", text: "Identified core requirements: [Python, FastAPI, Postgres, Docker, Kafka]" },
-          { tag: "COMPARE", cls: "tag-match", text: "Cross-referencing candidate profile against 800+ tech taxonomy nodes..." },
-          { tag: "GAP", cls: "tag-warn", text: "Identified skill deficit: Apache Kafka / Event-driven architecture" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Evaluation complete. Overall candidate alignment: 87.4%." }
+          { time: "00:01", tag: "SCAN", cls: "action", msg: "Auditing page layout against WCAG 2.1 Level AA standards..." },
+          { time: "00:02", tag: "ISSUE", cls: "warn", msg: "Found 2 images missing 'alt' text for screen readers." },
+          { time: "00:03", tag: "REPAIR", cls: "success", msg: "Synthesizing 'a11y_fix.diff' to insert accessible labels." },
+          { time: "00:04", tag: "SCORE", cls: "success", msg: "Score boosted from 74 (Grade C) to 98 (Grade A+)!" }
         ],
-        result: JSON.stringify({
-          composite_score: 87.4,
-          tier: "Tier 1 (High Match)",
-          matched: ["Python 3.11+", "FastAPI", "PostgreSQL", "Docker", "Microservices"],
-          recommended_roadmap: ["Build end-to-end Kafka asynchronous event stream pipeline"]
-        }, null, 2)
+        techSnippet: `# Python: WCAG 2.1 AA Auditor Rule
+from src.rules.images import ImageAltAuditor
+auditor = ImageAltAuditor()
+violations = auditor.audit(dom_tree)
+# Emits standardized WCAG Success Criteria 1.1.1`
       },
 
-      "price-radar-core": {
-        title: "PriceRadar Core",
+      {
+        id: "price-radar-core",
+        category: "finance",
         icon: "📡",
-        desc: "E-Commerce price tracking, glitch anomaly detection, and multi-retailer arbitrage monitor.",
-        specs: "projects/price-radar-core.md",
-        controls: [
-          { id: "item", label: "Product SKU / URL", type: "text", val: "Sony WH-1000XM5 Wireless Headphones" },
-          { id: "threshold", label: "Anomaly Sensitivity (Z-Score)", type: "select", options: ["Strict (-3.0 σ)", "Aggressive (-2.0 σ)"], val: "Strict (-3.0 σ)" }
+        title: "PriceRadar Core",
+        tagline: "E-Commerce Deal Glitch & Price Monitor",
+        desc: "Monitors online stores 24/7, detects pricing glitches or dramatic discounts, and alerts you before items sell out.",
+        analogy: "Like having a sharp-eyed bargain hunter standing inside every online store, sounding an alarm the second an expensive item drops to a crazy discount.",
+        benefits: [
+          { strong: "Catches Huge Discounts", span: "Detects 30% to 70% drops immediately" },
+          { strong: "Filters Fake Sales", span: "Compares against real 30-day historical prices" },
+          { strong: "Instant Phone Alerts", span: "Sends immediate notifications when deals happen" }
         ],
-        metrics: [
-          { title: "Live Price", value: "$ 119.99", sub: "38.3% Drop" },
-          { title: "Historical Mean", value: "$ 194.37", sub: "30-Day Average" },
-          { title: "Anomaly Score", value: "- 4.12 σ", sub: "Pricing Glitch!" },
-          { title: "Alert Status", value: "Dispatched", sub: "Webhook 200 OK" }
+        specsUrl: "projects/price-radar-core.md",
+        techStack: "Playwright · BeautifulSoup4 · Pydantic v2",
+        demoType: "price_glitch",
+        actionBtn: "▶ Check Sony Headphones Price",
+        stats: [
+          { label: "Current Price", value: "$ 119.99", status: "38.3% Below Normal" },
+          { label: "Average Price", value: "$ 194.37", status: "30-Day True Average" },
+          { label: "Glitch Confidence", value: "99.4%", status: "Legitimate Price Drop" }
         ],
         logs: [
-          { tag: "INFO", cls: "tag-info", text: "Querying active pricing stream across 4 retail storefronts..." },
-          { tag: "INGEST", cls: "tag-action", text: "Parsed JSON-LD microdata: Live SKU $ 119.99 (In stock: 14)" },
-          { tag: "ANALYZE", cls: "tag-info", text: "Evaluating price against 30-day rolling Gaussian distribution..." },
-          { tag: "ALERT", cls: "tag-warn", text: "GLITCH DETECTED! Price variance: -4.12 standard deviations" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Triggered priority webhook alert to #deal-alerts-channel." }
+          { time: "00:01", tag: "CHECK", cls: "action", msg: "Checking retail store live price for Sony WH-1000XM5..." },
+          { time: "00:02", tag: "COMPARE", cls: "action", msg: "Comparing live price ($119.99) with 30-day average ($194.37)..." },
+          { time: "00:03", tag: "GLITCH", cls: "alert", msg: "ALARM: Significant price drop (-38.3%)! Statistical anomaly confirmed." },
+          { time: "00:04", tag: "DISPATCH", cls: "success", msg: "Push alert dispatched to user channels successfully!" }
         ],
-        result: JSON.stringify({
-          sku: "Sony WH-1000XM5",
-          live_price: 119.99,
-          mean_price: 194.37,
-          discount_percent: "38.3%",
-          is_glitch: true,
-          z_score: -4.12
-        }, null, 2)
+        techSnippet: `# Price Anomaly Detection with Z-Score
+def evaluate_pricing_anomaly(live_price: float, history: list[float]):
+    mean, std = statistics.mean(history), statistics.stdev(history)
+    z_score = (live_price - mean) / std
+    return z_score < -3.0  # Statistical glitch threshold`
       },
 
-      "sec-insight-engine": {
-        title: "SEC Insight Engine",
+      {
+        id: "career-forge-ai",
+        category: "optimization",
+        icon: "💼",
+        title: "CareerForge AI",
+        tagline: "Smart Resume & Job Alignment Engine",
+        desc: "Compares your resume against any job description, calculates your match percentage, and gives you a step-by-step checklist to land the role.",
+        analogy: "Like having a senior recruiter whisper in your ear exactly what keywords the company's hiring algorithm wants to see, and how to prove you have them.",
+        benefits: [
+          { strong: "Boosts Interview Invites", span: "Optimizes resume for automated ATS screeners" },
+          { strong: "Pinpoints Missing Skills", span: "Tells you the exact 1-2 skills you need next" },
+          { strong: "Actionable Learning Path", span: "Recommends portfolio projects to build" }
+        ],
+        specsUrl: "projects/career-forge-ai.md",
+        techStack: "Pydantic v2 · NLP · BeautifulSoup4",
+        demoType: "resume_matcher",
+        actionBtn: "▶ Match Resume to Backend Role",
+        stats: [
+          { label: "Job Match Score", value: "87.4%", status: "Tier 1 Top Candidate" },
+          { label: "Skills Matched", value: "5 / 6", status: "Python, FastAPI, Docker" },
+          { label: "Skill to Add", value: "Kafka", status: "High Priority Recommendation" }
+        ],
+        logs: [
+          { time: "00:01", tag: "READ", cls: "action", msg: "Parsing job description for 'Senior Backend Engineer'..." },
+          { time: "00:02", tag: "MATCH", cls: "action", msg: "Extracted candidate skills: Python, Docker, Postgres, FastAPI, Redis." },
+          { time: "00:03", tag: "RESULT", cls: "success", msg: "Match score: 87.4%! Candidate is primed for interview screening." }
+        ],
+        techSnippet: `# NLP Skill Taxonomy Comparator
+class AlignmentEngine:
+    def calculate_compatibility(self, resume_skills, jd_requirements):
+        matched = set(resume_skills).intersection(jd_requirements)
+        return len(matched) / len(jd_requirements) * 100`
+      },
+
+      {
+        id: "sec-insight-engine",
+        category: "finance",
         icon: "📊",
-        desc: "Automated SEC EDGAR 10-K/10-Q financial filing extractor and balance sheet auditor.",
-        specs: "projects/sec-insight-engine.md",
-        controls: [
-          { id: "ticker", label: "Company Ticker Symbol", type: "text", val: "AAPL" },
-          { id: "filing", label: "Filing Type", type: "select", options: ["10-K (Annual)", "10-Q (Quarterly)"], val: "10-K (Annual)" }
+        title: "SEC Insight Engine",
+        tagline: "Wall Street Company Health Scanner",
+        desc: "Extracts official government financial reports (10-K filings) for public companies and grades their financial health in plain English.",
+        analogy: "Like giving a multibillion-dollar company a medical checkup and health report card, showing you whether it is drowning in debt or financially rock-solid.",
+        benefits: [
+          { strong: "Cuts Through 200-Page Reports", span: "Instantly extracts balance sheets" },
+          { strong: "Clear Financial Grade", span: "Easy A+ to F report card for investors" },
+          { strong: "Detects Debt Traps", span: "Calculates solvency and cash reserves" }
         ],
-        metrics: [
-          { title: "Health Grade", value: "Grade A-", sub: "High Cash Flow" },
-          { title: "Current Ratio", value: "0.99", sub: "Industry Median: 1.20" },
-          { title: "Debt to Equity", value: "1.53", sub: "Healthy Leverage" },
-          { title: "Total Equity", value: "$ 62.1 B", sub: "Shareholders Equity" }
+        specsUrl: "projects/sec-insight-engine.md",
+        techStack: "SEC EDGAR API · Pydantic v2 · BS4",
+        demoType: "company_audit",
+        actionBtn: "▶ Run Audit on Apple Inc. (AAPL)",
+        stats: [
+          { label: "Company Grade", value: "Grade A-", status: "Excellent Cash Position" },
+          { label: "Cash Reserves", value: "$ 29.9 B", status: "Liquid Assets" },
+          { label: "Debt Safety", value: "1.53 D/E", status: "Healthy Leverage Ratio" }
         ],
         logs: [
-          { tag: "INFO", cls: "tag-info", text: "Initiating SEC EDGAR submissions API handshake for ticker AAPL..." },
-          { tag: "INGEST", cls: "tag-action", text: "Retrieved 10-K Annual Report HTML filing (Form 10-K FY 2025)" },
-          { tag: "PARSE", cls: "tag-perceive", text: "Extracted Consolidated Balance Sheet: Assets, Liabilities, Equity" },
-          { tag: "MATH", cls: "tag-info", text: "Computing GAAP financial ratios: Current, Quick, Debt-to-Equity..." },
-          { tag: "SUCCESS", cls: "tag-success", text: "Audited financial health. Grade assigned: A- (Strong liquidity)." }
+          { time: "00:01", tag: "EDGAR", cls: "action", msg: "Querying SEC government database for ticker 'AAPL'..." },
+          { time: "00:02", tag: "EXTRACT", cls: "action", msg: "Parsing Balance Sheet: Assets ($143B), Liabilities ($145B), Equity ($62B)" },
+          { time: "00:03", tag: "GRADE", cls: "success", msg: "Solvency computed: Operational cash flow offsets short-term debt. Grade: A-" }
         ],
-        result: JSON.stringify({
-          ticker: "AAPL",
-          form: "10-K",
-          balance_sheet: {
-            current_assets_millions: 143713,
-            current_liabilities_millions: 145308,
-            long_term_debt_millions: 95281,
-            shareholders_equity_millions: 62146
-          },
-          ratios: {
-            current_ratio: 0.99,
-            quick_ratio: 0.84,
-            debt_to_equity: 1.53
-          },
-          health_grade: "A-"
-        }, null, 2)
+        techSnippet: `# SEC Filing Balance Sheet Scraper
+from src.sec.edgar_client import EdgarClient
+client = EdgarClient(user_agent="PrajwalMahesh p@example.com")
+filing = client.get_latest_10k("AAPL")
+ratios = filing.calculate_liquidity_ratios()`
       },
 
-      "omni-research-core": {
-        title: "OmniResearch Core",
+      {
+        id: "omni-research-core",
+        category: "agents",
         icon: "🔍",
-        desc: "Autonomous multi-source deep web research agent, fact synthesizer and contradiction radar.",
-        specs: "projects/omni-research-core.md",
-        controls: [
-          { id: "query", label: "Deep Research Topic", type: "text", val: "Commercial viability of solid-state battery cells for EVs by 2027" }
+        title: "OmniResearch Core",
+        tagline: "Autonomous Fact-Checking & Deep Research Agent",
+        desc: "Researches complex topics across dozens of articles, separates facts from rumors, and points out when sources contradict each other.",
+        analogy: "Like sending 10 investigative journalists to read every report on a topic in 30 seconds, filter out speculation, and hand you a verified 1-page briefing.",
+        benefits: [
+          { strong: "Filters Out Fake News", span: "Checks multiple trusted sources simultaneously" },
+          { strong: "Spots Contradictions", span: "Alerts you when experts disagree on numbers" },
+          { strong: "Source-Attributed", span: "Every claim includes exact links and citations" }
         ],
-        metrics: [
-          { title: "Sources Audited", value: "14 Sources", sub: "Peer-Reviewed & Industry" },
-          { title: "Claims Isolated", value: "32 Claims", sub: "Density Metrics" },
-          { title: "Contradictions", value: "1 Found", sub: "Production Cost Spread" },
-          { title: "Confidence", value: "88.5%", sub: "High Rigor" }
+        specsUrl: "projects/omni-research-core.md",
+        techStack: "Playwright · Pydantic v2 · AI Synthesis",
+        demoType: "research_query",
+        actionBtn: "▶ Synthesize Solid-State Battery Research",
+        stats: [
+          { label: "Sources Audited", value: "14 Sources", status: "Scientific & Industry" },
+          { label: "Facts Verified", value: "32 Claims", status: "Cross-Correlated" },
+          { label: "Confidence", value: "88.5%", status: "High Research Rigor" }
         ],
         logs: [
-          { tag: "DISPATCH", cls: "tag-action", text: "Spawned 4 parallel query threads across technical databases..." },
-          { tag: "INGEST", cls: "tag-info", text: "Fetched 14 technical reports and laboratory whitepapers." },
-          { tag: "EXTRACT", cls: "tag-perceive", text: "Extracted 32 verifiable assertions regarding energy density." },
-          { tag: "RADAR", cls: "tag-warn", text: "Contradiction detected: Cell cost projections diverge ($115 vs $180 / kWh)." },
-          { tag: "SUCCESS", cls: "tag-success", text: "Synthesized source-attributed executive dossier in markdown format." }
+          { time: "00:01", tag: "QUERY", cls: "action", msg: "Fanning out parallel research on solid-state EV battery commercialization..." },
+          { time: "00:02", tag: "AUDIT", cls: "action", msg: "Parsed 14 technical roadmaps (Toyota, QuantumScape, CATL)." },
+          { time: "00:03", tag: "ALERT", cls: "warn", msg: "Contradiction found: Cell cost targets range between $115 and $180/kWh." },
+          { time: "00:04", tag: "DOSSIER", cls: "success", msg: "Synthesized executive briefing with verified citations complete." }
         ],
-        result: JSON.stringify({
-          topic: "Commercial viability of solid-state battery cells for EVs by 2027",
-          sources_analyzed: 14,
-          consensus: "Initial luxury deployments in 2026-2027; mass market by 2030.",
-          divergences: [
-            { metric: "Cell Cost", source_a: "$115/kWh", source_b: "$180/kWh", variance: "High" }
-          ]
-        }, null, 2)
+        techSnippet: `# Cross-Source Contradiction Radar
+def detect_divergences(claims: list[Claim]):
+    clusters = group_by_metric(claims)
+    return [c for c in clusters if c.variance > THRESHOLD]`
       },
 
-      "flow-rpa-core": {
-        title: "FlowRPA Core",
+      {
+        id: "flow-rpa-core",
+        category: "agents",
         icon: "⚡",
-        desc: "Enterprise browser RPA with intelligent self-healing selector fallback algorithms.",
-        specs: "projects/flow-rpa-core.md",
-        controls: [
-          { id: "flow", label: "Workflow Script", type: "select", options: ["enterprise_invoice_flow.json", "b2b_vendor_sync.json"], val: "enterprise_invoice_flow.json" }
+        title: "FlowRPA Core",
+        tagline: "Self-Healing Website Automation Robot",
+        desc: "Automates web tasks without ever breaking when a website changes its design, colors, or button positions.",
+        analogy: "Normal automation bots are blind — if a website moves a button 2 inches, they crash. FlowRPA has intelligent eyes: it recognizes moved buttons and keeps working.",
+        benefits: [
+          { strong: "Zero Broken Workflows", span: "Self-heals and auto-fixes target selectors" },
+          { strong: "Runs 24/7 Unattended", span: "Never requires emergency developer fixes" },
+          { strong: "Fuzzy AI Recognition", span: "Recognizes elements by label, shape, and context" }
         ],
-        metrics: [
-          { title: "Completed Steps", value: "5 / 5", sub: "100% Success" },
-          { title: "Self-Healed", value: "1 Step", sub: "Auto-Recovered" },
-          { title: "Match Confidence", value: "96.2%", sub: "Levenshtein Distance" },
-          { title: "Downtime Prevented", value: "Zero Fail", sub: "Enterprise Ready" }
+        specsUrl: "projects/flow-rpa-core.md",
+        techStack: "Playwright · Levenshtein Distance · Pydantic v2",
+        demoType: "self_healing",
+        actionBtn: "▶ Test Self-Healing Button Locator",
+        stats: [
+          { label: "Workflow Success", value: "100%", status: "5 of 5 Steps Passed" },
+          { label: "Auto-Healed Steps", value: "1 Step", status: "Moved Button Recovered" },
+          { label: "Match Confidence", value: "96.2%", status: "High Visual Match" }
         ],
         logs: [
-          { tag: "STEP 1", cls: "tag-action", text: "Navigate to https://portal.internal.corp/invoicing ... [OK]" },
-          { tag: "STEP 2", cls: "tag-action", text: "Fill input '#username-field' with 'finance_agent' ... [OK]" },
-          { tag: "WARN", cls: "tag-warn", text: "Step 3: Primary selector '#btn-submit-v2' NOT FOUND on page!" },
-          { tag: "HEAL", cls: "tag-match", text: "Analyzing DOM neighborhood: located matching button (96.2% confidence)" },
-          { tag: "STEP 4", cls: "tag-action", text: "Click auto-healed button '//button[contains(.,'Submit Invoice')]' ... [OK]" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Workflow concluded successfully. Transaction ID: INV-902381" }
+          { time: "00:01", tag: "RPA", cls: "action", msg: "Starting automated invoice submission workflow..." },
+          { time: "00:02", tag: "WARN", cls: "warn", msg: "Primary button ID '#btn-submit-v2' was deleted by frontend update!" },
+          { time: "00:03", tag: "HEAL", cls: "success", msg: "Self-Healing Engine engaged: Located button by text 'Submit Invoice' (96.2% match)." },
+          { time: "00:04", tag: "FINISH", cls: "success", msg: "Invoice INV-902381 submitted successfully without any human intervention." }
         ],
-        result: JSON.stringify({
-          workflow: "enterprise_invoice_flow.json",
-          total_steps: 5,
-          healed_steps: 1,
-          healed_details: {
-            original_selector: "#btn-submit-v2",
-            healed_xpath: "//button[contains(.,'Submit Invoice')]",
-            confidence: "96.2%"
-          }
-        }, null, 2)
+        techSnippet: `# Self-Healing Selector Engine
+def find_healed_locator(broken_id: str, candidates: list[DOMNode]):
+    scored = [(node, similarity(node.text, broken_id)) for node in candidates]
+    return max(scored, key=lambda x: x[1])  # Recovers moved element`
       },
 
-      "cyber-probe-ai": {
-        title: "CyberProbe AI",
+      {
+        id: "cyber-probe-ai",
+        category: "security",
         icon: "🔒",
-        desc: "OWASP HTTP security header auditor, cookie security scanner, and server hardening advisor.",
-        specs: "projects/cyber-probe-ai.md",
-        controls: [
-          { id: "target", label: "Target Domain / URL", type: "text", val: "https://insecure-portal.example.com" }
+        title: "CyberProbe AI",
+        tagline: "Website Security & Hacker Shield Auditor",
+        desc: "Inspects websites for security holes, missing locks, and vulnerabilities that hackers could exploit, and gives a letter grade.",
+        analogy: "Like a building safety inspector checking if the windows are locked, if alarm systems are active, and if intruders can steal company data.",
+        benefits: [
+          { strong: "Protects Visitor Data", span: "Checks cookie privacy & encryption flags" },
+          { strong: "Prevents Hackers & Scammers", span: "Verifies Content-Security-Policy & HSTS" },
+          { strong: "One-Click Config Fix", span: "Generates ready-to-use security settings" }
         ],
-        metrics: [
-          { title: "Hardening Score", value: "54 / 100", sub: "Grade D" },
-          { title: "Critical Flaws", value: "2 Detected", sub: "Missing CSP & Cookie" },
-          { title: "Server Header", value: "Disclosed", sub: "nginx/1.18.0" },
-          { title: "Hardening Patch", value: "Generated", sub: "security.conf" }
+        specsUrl: "projects/cyber-probe-ai.md",
+        techStack: "Playwright · OWASP Top 10 · Pydantic v2",
+        demoType: "security_audit",
+        actionBtn: "▶ Audit Web Server Hardening",
+        stats: [
+          { label: "Security Grade", value: "Grade D", status: "Action Needed Immediately" },
+          { label: "Critical Flaws", value: "2 Vulnerabilities", status: "Missing CSP & Cookie Flag" },
+          { label: "Fix Provided", value: "security.conf", status: "Drop-In Nginx Snippet" }
         ],
         logs: [
-          { tag: "PROBE", cls: "tag-info", text: "Dispatching TLS/HTTP inspector probe to target URL..." },
-          { tag: "HEADER", cls: "tag-warn", text: "FAIL: Content-Security-Policy header is missing" },
-          { tag: "COOKIE", cls: "tag-warn", text: "FAIL: Cookie 'session_token' missing 'HttpOnly' flag" },
-          { tag: "BANNER", cls: "tag-warn", text: "LEAK: Server header exposes exact version 'nginx/1.18.0'" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Audit complete. Score: 54/100 (Grade D). Hardening snippet generated." }
+          { time: "00:01", tag: "PROBE", cls: "action", msg: "Dispatching HTTP security header inspector to target website..." },
+          { time: "00:02", tag: "FLAW", cls: "alert", msg: "Missing 'Content-Security-Policy' — vulnerable to malicious script injection." },
+          { time: "00:03", tag: "FLAW", cls: "alert", msg: "Session cookie lacks 'HttpOnly' — accessible to stolen session attacks." },
+          { time: "00:04", tag: "PATCH", cls: "success", msg: "Generated 'security.conf' with 1-click hardening rules." }
         ],
-        result: JSON.stringify({
-          target: "https://insecure-portal.example.com",
-          grade: "D",
-          score: 54,
-          findings: [
-            { header: "Content-Security-Policy", status: "MISSING", severity: "HIGH" },
-            { cookie: "session_token", status: "MISSING_HTTPONLY", severity: "HIGH" },
-            { banner: "Server", leaked: "nginx/1.18.0", severity: "LOW" }
-          ]
-        }, null, 2)
+        techSnippet: `# OWASP Security Header Inspection
+def audit_http_headers(headers: dict):
+    results = {}
+    results["CSP"] = "content-security-policy" in headers
+    results["HSTS"] = "strict-transport-security" in headers
+    return results`
       },
 
-      "aero-route-agent": {
-        title: "AeroRoute Agent",
+      {
+        id: "aero-route-agent",
+        category: "optimization",
         icon: "✈️",
-        desc: "Multi-hop flight route explorer and Pareto layover optimization engine.",
-        specs: "projects/aero-route-agent.md",
-        controls: [
-          { id: "origin", label: "Origin Airport (IATA)", type: "text", val: "SFO" },
-          { id: "dest", label: "Destination Airport (IATA)", type: "text", val: "TYO" }
+        title: "AeroRoute Agent",
+        tagline: "Multi-Hop Flight & Sweet-Spot Route Finder",
+        desc: "Discovers flight connections that save you hundreds of dollars while keeping layovers short and comfortable.",
+        analogy: "Standard flight search engines only sort by cheapest (which has agonizing 14-hour layovers) or fastest (which costs a fortune). AeroRoute calculates the hidden sweet spot.",
+        benefits: [
+          { strong: "Saves Real Money", span: "Up to 40% cheaper than direct tickets" },
+          { strong: "Safe Layovers", span: "Guarantees no missed airport transfers" },
+          { strong: "Pareto Frontier Math", span: "Mathematically optimal balance of time & cost" }
         ],
-        metrics: [
-          { title: "Pareto Winner", value: "Option #2", sub: "$685 (Balanced ⭐)" },
-          { title: "Savings vs Direct", value: "$ 435.00", sub: "38.8% Discount" },
-          { title: "Duration Penalty", value: "+ 3h 25m", sub: "Acceptable Trade-off" },
-          { title: "Layover Risk", value: "0.12 (Low)", sub: "Incheon (ICN)" }
+        specsUrl: "projects/aero-route-agent.md",
+        techStack: "Playwright · Pydantic v2 · Pareto Frontier",
+        demoType: "flight_finder",
+        actionBtn: "▶ Optimize Route: SFO ➔ Tokyo",
+        stats: [
+          { label: "Recommended Route", value: "SFO ➔ ICN ➔ TYO", status: "Sweet-Spot Winner ⭐" },
+          { label: "Total Price", value: "$ 685.00", status: "Saves $435 vs Direct" },
+          { label: "Extra Travel Time", value: "+ 3h 25m", status: "Comfortable 2h Layover" }
         ],
         logs: [
-          { tag: "GRAPH", cls: "tag-info", text: "Traversing flight network graph from SFO to TYO (max 2 layovers)..." },
-          { tag: "EVAL", cls: "tag-action", text: "Evaluating 48 potential routing permutations..." },
-          { tag: "PARETO", cls: "tag-match", text: "Pruning dominated flight itineraries across time and price..." },
-          { tag: "SELECT", cls: "tag-success", text: "Identified optimal balanced Pareto route: SFO ➔ ICN ➔ NRT ($685, 14h 50m)" },
-          { tag: "SUCCESS", cls: "tag-success", text: "Complete Pareto frontier table rendered." }
+          { time: "00:01", tag: "GRAPH", cls: "action", msg: "Traversing flight connections from San Francisco (SFO) to Tokyo (TYO)..." },
+          { time: "00:02", tag: "EVAL", cls: "action", msg: "Filtering 48 options for layovers between 1.5 and 3 hours..." },
+          { time: "00:03", tag: "SWEETSPOT", cls: "success", msg: "Winner found: SFO ➔ ICN ➔ NRT at $685 (38.8% discount vs nonstop)!" }
         ],
-        result: JSON.stringify({
-          route: "SFO -> TYO",
-          optimal_option: {
-            routing: "SFO -> ICN -> NRT",
-            duration: "14h 50m",
-            fare_usd: 685.00,
-            savings_vs_direct: "$435.00",
-            category: "BALANCED_PARETO_OPTIMAL"
-          }
-        }, null, 2)
+        techSnippet: `# Multi-Objective Pareto Frontier Calculator
+def is_pareto_dominant(candidate, all_routes):
+    return not any(
+        other.cost <= candidate.cost and other.duration < candidate.duration
+        for other in all_routes
+    )`
       },
 
-      "clean-dom-crawler": {
-        title: "CleanDOM Crawler",
+      {
+        id: "clean-dom-crawler",
+        category: "optimization",
         icon: "🧹",
-        desc: "High-performance semantic web scraper and RAG markdown token chunker.",
-        specs: "projects/clean-dom-crawler.md",
-        controls: [
-          { id: "url", label: "Documentation Webpage URL", type: "text", val: "https://docs.example.com/deep-dive" },
-          { id: "chunkSize", label: "Max Tokens per Chunk", type: "number", val: "400" }
+        title: "CleanDOM Crawler",
+        tagline: "Web De-Clutterer & Clean Reader for AI",
+        desc: "Strips away popups, banner ads, tracking scripts, and cookie dialogs from websites, leaving pure clean text and images ready for AI systems.",
+        analogy: "Like opening a messy magazine covered in sticky ads and coupons, and instantly turning it into a beautiful, clean book.",
+        benefits: [
+          { strong: "Cuts 84% Junk", span: "Eliminates ads, footers, and sidebars" },
+          { strong: "91% Cheaper for AI", span: "Saves massive token costs for AI models" },
+          { strong: "Preserves Code & Math", span: "Keeps important formulas and diagrams intact" }
         ],
-        metrics: [
-          { title: "Boilerplate Cut", value: "84.2%", sub: "Nav, Ads & Cruft" },
-          { title: "Semantic Tokens", value: "2,140 Tok", sub: "Clean Content" },
-          { title: "Generated Chunks", value: "6 Chunks", sub: "50-Token Overlap" },
-          { title: "RAG Efficiency", value: "+ 91.2%", sub: "Token Cost Savings" }
+        specsUrl: "projects/clean-dom-crawler.md",
+        techStack: "BeautifulSoup4 · Pydantic v2 · RAG",
+        demoType: "clean_reader",
+        actionBtn: "▶ Strip Clutter from Sample Page",
+        stats: [
+          { label: "Boilerplate Removed", value: "84.2%", status: "Ads & Popups Stripped" },
+          { label: "Clean Content", value: "2,140 Words", status: "Pure Knowledge" },
+          { label: "AI Cost Savings", value: "91.2%", status: "Token Efficiency" }
         ],
         logs: [
-          { tag: "INGEST", cls: "tag-info", text: "Fetched 142 KB raw HTML document..." },
-          { tag: "STRIP", cls: "tag-action", text: "Stripped navbars, footers, advertisement iframes, and cookie dialogs." },
-          { tag: "PRESERVE", cls: "tag-match", text: "Preserved 4 fenced code blocks and 2 mathematical KaTeX blocks." },
-          { tag: "CHUNK", cls: "tag-info", text: "Partitioned clean markdown into 6 context-bounded RAG chunks..." },
-          { tag: "SUCCESS", cls: "tag-success", text: "RAG payload ready in clean_rag_payload.json (Tokens saved: 91.2%)." }
+          { time: "00:01", tag: "INGEST", cls: "action", msg: "Loading cluttered 142 KB web page filled with ads..." },
+          { time: "00:02", tag: "CLEAN", cls: "action", msg: "Removing tracking scripts, cookie dialogs, and navigation banners..." },
+          { time: "00:03", tag: "PRESERVE", cls: "success", msg: "Preserved 4 coding blocks and mathematical diagrams." },
+          { time: "00:04", tag: "READY", cls: "success", msg: "Clean markdown chunks generated. Ready for immediate reading!" }
         ],
-        result: JSON.stringify({
-          raw_html_bytes: 145408,
-          clean_markdown_bytes: 8420,
-          semantic_chunks: 6,
-          token_reduction: "91.2%",
-          sample_chunk_1: "Memory virtualization abstracts physical RAM into contiguous virtual address spaces..."
-        }, null, 2)
+        techSnippet: `# Semantic Noise Filter Pipeline
+def extract_clean_content(raw_html: str):
+    soup = BeautifulSoup(raw_html, "html.parser")
+    for cruft in soup(["nav", "footer", "script", "aside", ".ads"]):
+        cruft.decompose()
+    return convert_to_clean_markdown(soup)`
       },
 
-      "ui-test-forge": {
-        title: "UITest Forge",
+      {
+        id: "ui-test-forge",
+        category: "security",
         icon: "🛠️",
-        desc: "Autonomous web UI bug hunter and standalone Pytest test script synthesizer.",
-        specs: "projects/ui-test-forge.md",
-        controls: [
-          { id: "appUrl", label: "Target Application URL", type: "text", val: "https://portal.example.com" },
-          { id: "framework", label: "Test Framework Target", type: "select", options: ["Pytest + Playwright", "Jest + Playwright"], val: "Pytest + Playwright" }
+        title: "UITest Forge",
+        tagline: "Automated Website Bug Hunter",
+        desc: "Crawls websites to test every button and form, identifies broken links or inaccessible controls, and generates automated quality assurance tests.",
+        analogy: "Like hiring a digital inspector who clicks on every single door handle, button, and light switch on your site to make sure nothing is broken before real visitors arrive.",
+        benefits: [
+          { strong: "Catches Invisible Bugs", span: "Finds zero-sized or unclickable buttons" },
+          { strong: "Protects User Experience", span: "Ensures forms can be submitted smoothly" },
+          { strong: "Writes the Tests For You", span: "Synthesizes Python Pytest scripts automatically" }
         ],
-        metrics: [
-          { title: "Indexed Nodes", value: "48 Elements", sub: "Forms & Controls" },
-          { title: "Defects Found", value: "2 Defects", sub: "Unclickable & Missing" },
-          { title: "Synthesized Tests", value: "4 Test Cases", sub: "Production Ready" },
-          { title: "CI Integration", value: "100% Offline", sub: "Zero-Flake" }
+        specsUrl: "projects/ui-test-forge.md",
+        techStack: "Playwright · Pytest · Pydantic v2",
+        demoType: "bug_hunter",
+        actionBtn: "▶ Hunt for Broken Elements",
+        stats: [
+          { label: "Controls Tested", value: "48 Elements", status: "Buttons, Forms, Links" },
+          { label: "Defects Caught", value: "2 Issues", status: "Unclickable & Missing Label" },
+          { label: "Tests Generated", value: "4 Pytest Cases", status: "Ready for CI Run" }
         ],
         logs: [
-          { tag: "CRAWL", cls: "tag-info", text: "Scanning web DOM for forms, inputs, buttons, and anchors..." },
-          { tag: "AUDIT", cls: "tag-warn", text: "DEFECT-01: <button id='reset-btn'> has zero clickable bounding box." },
-          { tag: "AUDIT", cls: "tag-warn", text: "DEFECT-02: <input id='org-code'> lacks associated accessible label." },
-          { tag: "SYNTH", cls: "tag-match", text: "Synthesizing executable Pytest test cases into tests/test_portal.py..." },
-          { tag: "SUCCESS", cls: "tag-success", text: "4 Pytest test functions generated and ready for CI/CD pipeline." }
+          { time: "00:01", tag: "EXPLORE", cls: "action", msg: "Crawling web app UI and indexing 48 interactive components..." },
+          { time: "00:02", tag: "DEFECT", cls: "warn", msg: "Caught Bug #1: Reset button has 0x0 clickable area (unclickable)." },
+          { time: "00:03", tag: "DEFECT", cls: "warn", msg: "Caught Bug #2: Organization code input lacks descriptive label." },
+          { time: "00:04", tag: "TESTS", cls: "success", msg: "Synthesized standalone Pytest test suite into 'test_portal.py'!" }
         ],
-        result: `# Synthesized Pytest Script Preview
-import pytest
-from playwright.sync_api import Page, expect
-
-def test_portal_elements_functional(page: Page):
-    page.goto("https://portal.example.com")
-    org_input = page.locator("#org-code")
-    expect(org_input).to_be_visible()
-    org_input.fill("CORP-9981")
-    submit_btn = page.locator("button[type='submit']")
-    expect(submit_btn).to_be_enabled()
-    submit_btn.click()
-`
+        techSnippet: `# Automated Pytest Synthesizer
+def generate_pytest_suite(indexed_elements: list[Element]):
+    tests = []
+    for el in indexed_elements:
+        tests.append(f"def test_{el.safe_id}(page): page.locator('{el.selector}').click()")
+    return "\n".join(tests)`
       }
-    };
+    ];
 
-    let activeProjectKey = "autonomous-web-agent";
+    let currentProject = projectsData[0];
+    let currentFilter = "all";
+    let isDevMode = false;
 
-    function selectProject(key) {
-      activeProjectKey = key;
-      const p = projects[key];
+    function renderProjectsList() {
+      const container = document.getElementById("projectList");
+      const filtered = currentFilter === "all"
+        ? projectsData
+        : projectsData.filter(p => p.category === currentFilter);
 
-      // Update Nav
-      document.querySelectorAll(".nav-item").forEach(item => {
-        item.classList.toggle("active", item.getAttribute("data-id") === key);
-      });
-
-      // Update Header
-      document.getElementById("projectTitle").innerHTML = `<span>${p.icon}</span> ${p.title}`;
-      document.getElementById("projectDesc").innerText = p.desc;
-      document.getElementById("specsLink").setAttribute("href", p.specs);
-
-      // Render Controls
-      const controlsContainer = document.getElementById("controlsContainer");
-      controlsContainer.innerHTML = p.controls.map(c => {
-        if (c.type === "select") {
-          return `
-            <div class="form-group">
-              <label>${c.label}</label>
-              <select class="form-control" id="${c.id}">
-                ${c.options.map(opt => `<option value="${opt}" ${opt === c.val ? 'selected' : ''}>${opt}</option>`).join("")}
-              </select>
+      container.innerHTML = filtered.map(p => `
+        <div class="project-card ${p.id === currentProject.id ? 'active' : ''}" onclick="selectProject('${p.id}')">
+          <div class="project-card-header">
+            <div class="project-icon">${p.icon}</div>
+            <div class="project-card-title">
+              <h3>${p.title}</h3>
+              <div class="project-tagline">${p.tagline}</div>
             </div>
-          `;
-        }
-        return `
-          <div class="form-group">
-            <label>${c.label}</label>
-            <input class="form-control" id="${c.id}" type="${c.type}" value="${c.val}">
           </div>
-        `;
-      }).join("");
-
-      // Render Metrics
-      const metricsGrid = document.getElementById("metricsGrid");
-      metricsGrid.innerHTML = p.metrics.map(m => `
-        <div class="metric-card">
-          <div class="title">${m.title}</div>
-          <div class="value">${m.value}</div>
-          <div class="subtitle">${m.sub}</div>
+          <p>${p.desc}</p>
+          <div class="project-meta-row">
+            <span class="tech-pill">${p.techStack}</span>
+            <span class="verified-pill">✓ CI Passing</span>
+          </div>
         </div>
       `).join("");
-
-      // Reset Terminal
-      const terminal = document.getElementById("terminal");
-      terminal.innerHTML = `<div class="log-line"><span class="log-time">[00:00:00]</span> <span class="log-tag tag-info">READY</span> <span>Working model initialized. Click 'Run Live Simulation' above to execute.</span></div>`;
-
-      // Hide Result Box
-      const resBox = document.getElementById("resultBox");
-      resBox.style.display = "none";
-      resBox.innerText = "";
     }
 
-    function runSimulation() {
-      const p = projects[activeProjectKey];
-      const terminal = document.getElementById("terminal");
-      const resBox = document.getElementById("resultBox");
-      const timer = document.getElementById("execTimer");
-      terminal.innerHTML = "";
-      resBox.style.display = "none";
+    function selectProject(id) {
+      const found = projectsData.find(p => p.id === id);
+      if (found) {
+        currentProject = found;
+        renderProjectsList();
+        renderShowcaseStage();
+      }
+    }
 
-      const btn = document.getElementById("runBtn");
+    function renderShowcaseStage() {
+      const p = currentProject;
+      const stage = document.getElementById("showcaseStage");
+
+      stage.innerHTML = `
+        <div class="stage-header">
+          <div class="stage-title-row">
+            <div class="stage-title-wrap">
+              <div class="stage-big-icon">${p.icon}</div>
+              <div>
+                <h2>${p.title}</h2>
+                <div class="stage-badge">${p.tagline}</div>
+              </div>
+            </div>
+            <a href="${p.specsUrl}" target="_blank" class="specs-btn">
+              📄 View Full Architecture Specs ↗
+            </a>
+          </div>
+
+          <!-- Plain English Explainer -->
+          <div class="explainer-box">
+            <div class="analogy-label">💡 How it works in simple terms</div>
+            <div class="analogy-text">${p.analogy}</div>
+          </div>
+
+          <!-- Key Benefits -->
+          <div class="benefits-row">
+            ${p.benefits.map(b => `
+              <div class="benefit-item">
+                <strong>${b.strong}</strong>
+                <span>${b.span}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="stage-body">
+          <!-- Interactive Playground Demo Canvas -->
+          <div class="demo-container">
+            <div class="demo-header">
+              <div class="demo-header-title">
+                <span>🎮 Live Working Model Simulator</span>
+              </div>
+              <button class="run-btn" id="runSimulationBtn" onclick="runInteractiveDemo()">
+                ${p.actionBtn}
+              </button>
+            </div>
+
+            <div class="interactive-canvas" id="interactiveCanvas">
+              <!-- Visual Scorecard & Metrics -->
+              <div class="stats-bar">
+                ${p.stats.map(s => `
+                  <div class="stat-box">
+                    <div class="stat-label">${s.label}</div>
+                    <div class="stat-value">${s.value}</div>
+                    <div class="stat-status">${s.status}</div>
+                  </div>
+                `).join("")}
+              </div>
+
+              <!-- Live Execution Logs -->
+              <div class="terminal-section" id="demoTerminal">
+                <div class="term-line">
+                  <span class="term-time">[Ready]</span>
+                  <span class="term-tag action">SIMULATOR</span>
+                  <span>Click "<strong>${p.actionBtn}</strong>" above to watch this system execute in real-time.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Developer Mode Panel (Code & Schemas) -->
+          <div class="dev-mode-panel ${isDevMode ? 'active' : ''}" id="devPanel">
+            <div class="dev-mode-header">
+              <span>⚡ Technical Architecture & Code Implementation</span>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">(Visible in Developer Mode)</span>
+            </div>
+            <div class="dev-code-block">${p.techSnippet}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function runInteractiveDemo() {
+      const p = currentProject;
+      const term = document.getElementById("demoTerminal");
+      const btn = document.getElementById("runSimulationBtn");
+
       btn.disabled = true;
-      btn.innerText = "⏳ Executing...";
+      btn.innerText = "⏳ Running Working Model...";
+      term.innerHTML = "";
 
       let step = 0;
-      const startTime = Date.now();
       const interval = setInterval(() => {
         if (step < p.logs.length) {
           const l = p.logs[step];
-          const now = new Date();
-          const timeStr = `[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
           const line = document.createElement("div");
-          line.className = "log-line";
-          line.innerHTML = `<span class="log-time">${timeStr}</span> <span class="log-tag ${l.cls}">${l.tag}</span> <span>${l.text}</span>`;
-          terminal.appendChild(line);
-          terminal.scrollTop = terminal.scrollHeight;
+          line.className = "term-line";
+          line.innerHTML = `
+            <span class="term-time">[${l.time}]</span>
+            <span class="term-tag ${l.cls}">${l.tag}</span>
+            <span>${l.msg}</span>
+          `;
+          term.appendChild(line);
+          term.scrollTop = term.scrollHeight;
           step++;
-          timer.innerText = ((Date.now() - startTime) / 1000).toFixed(1) + "s";
         } else {
           clearInterval(interval);
           btn.disabled = false;
-          btn.innerText = "▶ Re-Run Simulation";
-          resBox.style.display = "block";
-          resBox.innerText = p.result;
+          btn.innerText = `▶ Re-Run Simulation`;
         }
-      }, 350);
+      }, 400);
     }
 
-    // Attach Click Handlers
-    document.querySelectorAll(".nav-item").forEach(item => {
-      item.addEventListener("click", () => {
-        selectProject(item.getAttribute("data-id"));
+    function filterCategory(cat) {
+      currentFilter = cat;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("onclick").includes(cat));
       });
-    });
+      renderProjectsList();
+    }
 
-    // Check URL Hash for Deep Linking
+    function setMode(mode) {
+      isDevMode = (mode === "dev");
+      document.getElementById("simpleModeBtn").classList.toggle("active", !isDevMode);
+      document.getElementById("devModeBtn").classList.toggle("active", isDevMode);
+
+      const devPanel = document.getElementById("devPanel");
+      if (devPanel) {
+        devPanel.classList.toggle("active", isDevMode);
+      }
+    }
+
+    // Initialize
     window.addEventListener("load", () => {
       const hash = window.location.hash.replace("#", "");
-      if (hash && projects[hash]) {
-        selectProject(hash);
-      } else {
-        selectProject("autonomous-web-agent");
+      if (hash) {
+        const found = projectsData.find(p => p.id === hash);
+        if (found) currentProject = found;
       }
+      renderProjectsList();
+      renderShowcaseStage();
     });
   </script>
 </body>
