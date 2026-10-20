@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prajwal Mahesh | Engineering Systems & Autonomous Agents Playground</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --primary: #58a6ff;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+      --accent: #a371f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Sidebar */
+    aside {
+      width: 320px;
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .brand {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand h1 { font-size: 1.15rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .brand p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+    .nav-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .group-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin: 12px 8px 4px 8px;
+      font-weight: 600;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-item:hover {
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--text);
+    }
+    .nav-item.active {
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--primary);
+      border-left: 3px solid var(--primary);
+    }
+    .nav-icon { font-size: 1.1rem; }
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sidebar-footer a { color: var(--primary); text-decoration: none; }
+    .sidebar-footer a:hover { text-decoration: underline; }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      background: var(--bg);
+    }
+    header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-info h2 { font-size: 1.4rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .header-info p { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; max-width: 680px; }
+    .badge-pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #21262d;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .badge-pill.status-green { color: var(--success); border-color: rgba(63, 185, 80, 0.3); background: rgba(63, 185, 80, 0.1); }
+    .action-links { display: flex; gap: 10px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      border: 1px solid var(--border);
+      background: #21262d;
+      color: var(--text);
+    }
+    .btn:hover { background: #30363d; border-color: var(--text-muted); }
+    .btn.btn-primary { background: #238636; border-color: rgba(240, 246, 252, 0.1); color: #fff; }
+    .btn.btn-primary:hover { background: #2ea043; }
+
+    /* Playground Workspace */
+    .workspace {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+    @media (max-width: 1024px) {
+      .workspace { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 12px 16px;
+      background: #1c2128;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+
+    /* Controls Form */
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+    .form-control {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+
+    /* Terminal Console */
+    .terminal-container {
+      background: #0b0e14;
+      border-radius: 6px;
+      border: 1px solid #1f242c;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      padding: 16px;
+      flex: 1;
+      min-height: 280px;
+      max-height: 380px;
+      overflow-y: auto;
+      color: #9cd1bb;
+      line-height: 1.6;
+    }
+    .log-line { display: flex; gap: 8px; margin-bottom: 4px; word-break: break-all; }
+    .log-time { color: #484f58; flex-shrink: 0; }
+    .log-tag { font-weight: 600; flex-shrink: 0; }
+    .tag-action { color: #79c0ff; }
+    .tag-perceive { color: #d2a8ff; }
+    .tag-match { color: #7ee787; }
+    .tag-warn { color: #ffa657; }
+    .tag-info { color: #8b949e; }
+    .tag-success { color: #56d364; }
+
+    /* Visual Metrics Card */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .metric-card {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+    }
+    .metric-card .title { font-size: 0.75rem; color: var(--text-muted); }
+    .metric-card .value { font-size: 1.3rem; font-weight: 700; color: #fff; margin-top: 4px; }
+    .metric-card .subtitle { font-size: 0.75rem; color: var(--success); margin-top: 2px; }
+
+    .result-box {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      color: #c9d1d9;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside>
+    <div class="brand">
+      <h1>🚀 Systems Playground</h1>
+      <p>Working Models by Prajwal Mahesh</p>
+    </div>
+    <div class="nav-list" id="navList">
+      <div class="group-label">Autonomous Agents</div>
+      <div class="nav-item active" data-id="autonomous-web-agent">
+        <span class="nav-icon">🤖</span> Autonomous Web Agent
+      </div>
+      <div class="nav-item" data-id="flow-rpa-core">
+        <span class="nav-icon">⚡</span> FlowRPA Core
+      </div>
+      <div class="nav-item" data-id="omni-research-core">
+        <span class="nav-icon">🔍</span> OmniResearch Core
+      </div>
+      <div class="nav-item" data-id="ui-test-forge">
+        <span class="nav-icon">🛠️</span> UITest Forge
+      </div>
+
+      <div class="group-label">Financial & Strategy</div>
+      <div class="nav-item" data-id="fintrack">
+        <span class="nav-icon">💳</span> FinTrack Platform
+      </div>
+      <div class="nav-item" data-id="sec-insight-engine">
+        <span class="nav-icon">📊</span> SEC Insight Engine
+      </div>
+      <div class="nav-item" data-id="price-radar-core">
+        <span class="nav-icon">📡</span> PriceRadar Core
+      </div>
+
+      <div class="group-label">Security & Compliance</div>
+      <div class="nav-item" data-id="a11y-sentinel">
+        <span class="nav-icon">🛡️</span> A11y Sentinel
+      </div>
+      <div class="nav-item" data-id="cyber-probe-ai">
+        <span class="nav-icon">🔒</span> CyberProbe AI
+      </div>
+
+      <div class="group-label">Intelligence & Optimization</div>
+      <div class="nav-item" data-id="aero-route-agent">
+        <span class="nav-icon">✈️</span> AeroRoute Agent
+      </div>
+      <div class="nav-item" data-id="clean-dom-crawler">
+        <span class="nav-icon">🧹</span> CleanDOM Crawler
+      </div>
+      <div class="nav-item" data-id="career-forge-ai">
+        <span class="nav-icon">💼</span> CareerForge AI
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <span>GitHub: <strong>@prajwal0104</strong></span>
+      <a href="https://github.com/prajwal0104" target="_blank">Profile ↗</a>
+    </div>
+  </aside>
+
+  <!-- Main View Area -->
+  <main>
+    <header>
+      <div class="header-info">
+        <h2 id="projectTitle"><span>🤖</span> Autonomous Web Agent</h2>
+        <p id="projectDesc">Goal-driven browser automation agent powered by Playwright and cognitive planning loop.</p>
+      </div>
+      <div class="action-links">
+        <span class="badge-pill status-green" id="projectBadge">Verified CI Passing</span>
+        <a class="btn" id="specsLink" href="projects/autonomous-web-agent.md" target="_blank">📄 View Full Specs</a>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <!-- Input Controls Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span>⚙️ Working Model Parameters</span>
+          <button class="btn btn-primary" id="runBtn" onclick="runSimulation()">▶ Run Live Simulation</button>
+        </div>
+        <div class="panel-body" id="controlsContainer">
+          <!-- Dynamic Controls Inserted via JS -->
+        </div>
+      </div>
+
+      <!-- Execution Console & Telemetry Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span>🖥️ Live Execution Stream</span>
+          <span style="font-size:0.75rem; color:var(--text-muted);" id="execTimer">0.0s</span>
+        </div>
+        <div class="panel-body">
+          <div class="terminal-container" id="terminal">
+            <!-- Simulated Logs Written Here -->
+          </div>
+
+          <!-- Dynamic Visual Metrics -->
+          <div class="metrics-grid" id="metricsGrid">
+            <!-- Dynamic Metrics Inserted via JS -->
+          </div>
+
+          <div class="result-box" id="resultBox" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Project Database & Working Model Simulations
+    const projects = {
+      "autonomous-web-agent": {
+        title: "Autonomous Web Agent",
+        icon: "🤖",
+        desc: "Goal-driven browser automation agent powered by Playwright and cognitive planning loop.",
+        specs: "projects/autonomous-web-agent.md",
+        controls: [
+          { id: "goal", label: "Autonomous User Goal", type: "text", val: "Navigate to Hacker News, find top AI post, and extract title & URL" },
+          { id: "headless", label: "Browser Execution Mode", type: "select", options: ["Headless (Background Fast)", "Headed (Live Chromium Window)"], val: "Headless (Background Fast)" }
+        ],
+        metrics: [
+          { title: "Planning Steps", value: "2 Steps", sub: "100% Deterministic" },
+          { title: "Indexed Nodes", value: "60 Nodes", sub: "Accessibility Indexed" },
+          { title: "DOM Parsing Time", value: "48 ms", sub: "Sub-second" },
+          { title: "Status", value: "Success", sub: "Target Goal Reached" }
+        ],
+        logs: [
+          { tag: "INFO", cls: "tag-info", text: "Initializing Chromium browser context (viewport: 1280x800)..." },
+          { tag: "ACTION", cls: "tag-action", text: "[Step 1] Navigate to https://news.ycombinator.com" },
+          { tag: "PERCEIVE", cls: "tag-perceive", text: "Indexed 60 interactive links and 30 story items with semantic IDs." },
+          { tag: "PLAN", cls: "tag-info", text: "Analyzing story titles for semantic match with 'AI' / 'LLM'..." },
+          { tag: "MATCH", cls: "tag-match", text: "Identified Rank #3: 'Open-weights Reasoning Model Released' (ID: #link-3)" },
+          { tag: "ACTION", cls: "tag-action", text: "[Step 2] Extract attribute 'href' and inner text for element #link-3" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Target goal achieved in 2 steps (elapsed time: 2.12s)." }
+        ],
+        result: JSON.stringify({
+          status: "SUCCESS",
+          steps_taken: 2,
+          extracted_data: {
+            title: "Open-weights Reasoning Model Released",
+            url: "https://arxiv.org/abs/2610.12345",
+            score: "284 points by user_ml 4 hours ago"
+          }
+        }, null, 2)
+      },
+
+      "fintrack": {
+        title: "FinTrack Platform",
+        icon: "💳",
+        desc: "Full-stack personal finance tracker, telemetry audit ledger, and net burn rate calculator.",
+        specs: "projects/fintrack.md",
+        controls: [
+          { id: "income", label: "Monthly Gross Inflow ($)", type: "number", val: "6450" },
+          { id: "expense", label: "Monthly Outflow ($)", type: "number", val: "3120" }
+        ],
+        metrics: [
+          { title: "Net Cash Flow", value: "+ $3,330", sub: "51.6% Savings Rate" },
+          { title: "Runway Reserve", value: "14.2 Mos", sub: "Liquid Assets" },
+          { title: "Ledger Entries", value: "1,420", sub: "Schema Verified" },
+          { title: "Health Index", value: "98 / 100", sub: "Optimal Solvency" }
+        ],
+        logs: [
+          { tag: "INFO", cls: "tag-info", text: "Connecting to ASP.NET Core EF Core ledger context..." },
+          { tag: "INGEST", cls: "tag-action", text: "Inflow transaction batch processed: $ 6,450.00" },
+          { tag: "INGEST", cls: "tag-action", text: "Expense ledger reconciliation: $ 3,120.00 categorized across 5 categories" },
+          { tag: "METRIC", cls: "tag-match", text: "Calculated burn rate velocity: $ 104.00 / day" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Telemetry ledger updated. Savings rate confirmed at 51.6%." }
+        ],
+        result: JSON.stringify({
+          inflow: 6450.00,
+          outflow: 3120.00,
+          net_savings: 3330.00,
+          savings_rate: "51.6%",
+          category_allocation: {
+            housing: "46.5%",
+            investments: "25.6%",
+            groceries: "15.4%",
+            transport: "6.7%",
+            leisure: "5.8%"
+          }
+        }, null, 2)
+      },
+
+      "a11y-sentinel": {
+        title: "A11y Sentinel",
+        icon: "🛡️",
+        desc: "Automated WCAG 2.1 AA web accessibility auditor and automated remediation generator.",
+        specs: "projects/a11y-sentinel.md",
+        controls: [
+          { id: "url", label: "Target Website / HTML Page", type: "text", val: "https://example.com/checkout" },
+          { id: "level", label: "WCAG Conformance Target", type: "select", options: ["WCAG 2.1 Level AA", "WCAG 2.1 Level AAA"], val: "WCAG 2.1 Level AA" }
+        ],
+        metrics: [
+          { title: "A11y Score", value: "82 / 100", sub: "Grade B" },
+          { title: "High Violations", value: "1 Issue", sub: "Missing Alt Text" },
+          { title: "Medium Violations", value: "1 Issue", sub: "Unlabelled Input" },
+          { title: "Auto-Patch", value: "Generated", sub: "a11y_fix.diff" }
+        ],
+        logs: [
+          { tag: "INFO", cls: "tag-info", text: "Ingesting DOM tree structure from target page..." },
+          { tag: "AUDIT", cls: "tag-action", text: "Checking WCAG 1.1.1 Non-Text Content (Images)..." },
+          { tag: "WARN", cls: "tag-warn", text: "VIOLATION [WCAG-1.1.1]: <img src='/logo.png'> missing alt attribute" },
+          { tag: "AUDIT", cls: "tag-action", text: "Checking WCAG 1.3.1 Info and Relationships (Forms)..." },
+          { tag: "WARN", cls: "tag-warn", text: "VIOLATION [WCAG-1.3.1]: <input type='email'> missing <label> association" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Audit complete. Composite Score: 82/100. Remediation patch synthesized." }
+        ],
+        result: JSON.stringify({
+          score: 82,
+          grade: "B",
+          violations: [
+            { rule: "WCAG-1.1.1", severity: "HIGH", element: "<img src='/logo.png'>", fix: "Add alt='Company Brand Logo'" },
+            { rule: "WCAG-1.3.1", severity: "MEDIUM", element: "<input type='email'>", fix: "Wrap with <label for='email'>Email Address</label>" }
+          ]
+        }, null, 2)
+      },
+
+      "career-forge-ai": {
+        title: "CareerForge AI",
+        icon: "💼",
+        desc: "Skill gap analysis, resume ATS alignment scoring, and automated candidate roadmap.",
+        specs: "projects/career-forge-ai.md",
+        controls: [
+          { id: "role", label: "Target Engineering Role", type: "text", val: "Senior Backend Engineer (Python / Distributed Systems)" },
+          { id: "skills", label: "Candidate Skills Profile", type: "text", val: "Python, FastAPI, Docker, PostgreSQL, Redis, Microservices" }
+        ],
+        metrics: [
+          { title: "Alignment Index", value: "87.4%", sub: "Tier 1 Candidate" },
+          { title: "Matched Skills", value: "5 / 6", sub: "High Technical Overlap" },
+          { title: "Top Gap", value: "Kafka", sub: "Pub/Sub Messaging" },
+          { title: "ATS Match", value: "Pass", sub: "Optimized Keywords" }
+        ],
+        logs: [
+          { tag: "INFO", cls: "tag-info", text: "Extracting semantic competencies from target job description..." },
+          { tag: "EXTRACT", cls: "tag-action", text: "Identified core requirements: [Python, FastAPI, Postgres, Docker, Kafka]" },
+          { tag: "COMPARE", cls: "tag-match", text: "Cross-referencing candidate profile against 800+ tech taxonomy nodes..." },
+          { tag: "GAP", cls: "tag-warn", text: "Identified skill deficit: Apache Kafka / Event-driven architecture" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Evaluation complete. Overall candidate alignment: 87.4%." }
+        ],
+        result: JSON.stringify({
+          composite_score: 87.4,
+          tier: "Tier 1 (High Match)",
+          matched: ["Python 3.11+", "FastAPI", "PostgreSQL", "Docker", "Microservices"],
+          recommended_roadmap: ["Build end-to-end Kafka asynchronous event stream pipeline"]
+        }, null, 2)
+      },
+
+      "price-radar-core": {
+        title: "PriceRadar Core",
+        icon: "📡",
+        desc: "E-Commerce price tracking, glitch anomaly detection, and multi-retailer arbitrage monitor.",
+        specs: "projects/price-radar-core.md",
+        controls: [
+          { id: "item", label: "Product SKU / URL", type: "text", val: "Sony WH-1000XM5 Wireless Headphones" },
+          { id: "threshold", label: "Anomaly Sensitivity (Z-Score)", type: "select", options: ["Strict (-3.0 σ)", "Aggressive (-2.0 σ)"], val: "Strict (-3.0 σ)" }
+        ],
+        metrics: [
+          { title: "Live Price", value: "$ 119.99", sub: "38.3% Drop" },
+          { title: "Historical Mean", value: "$ 194.37", sub: "30-Day Average" },
+          { title: "Anomaly Score", value: "- 4.12 σ", sub: "Pricing Glitch!" },
+          { title: "Alert Status", value: "Dispatched", sub: "Webhook 200 OK" }
+        ],
+        logs: [
+          { tag: "INFO", cls: "tag-info", text: "Querying active pricing stream across 4 retail storefronts..." },
+          { tag: "INGEST", cls: "tag-action", text: "Parsed JSON-LD microdata: Live SKU $ 119.99 (In stock: 14)" },
+          { tag: "ANALYZE", cls: "tag-info", text: "Evaluating price against 30-day rolling Gaussian distribution..." },
+          { tag: "ALERT", cls: "tag-warn", text: "GLITCH DETECTED! Price variance: -4.12 standard deviations" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Triggered priority webhook alert to #deal-alerts-channel." }
+        ],
+        result: JSON.stringify({
+          sku: "Sony WH-1000XM5",
+          live_price: 119.99,
+          mean_price: 194.37,
+          discount_percent: "38.3%",
+          is_glitch: true,
+          z_score: -4.12
+        }, null, 2)
+      },
+
+      "sec-insight-engine": {
+        title: "SEC Insight Engine",
+        icon: "📊",
+        desc: "Automated SEC EDGAR 10-K/10-Q financial filing extractor and balance sheet auditor.",
+        specs: "projects/sec-insight-engine.md",
+        controls: [
+          { id: "ticker", label: "Company Ticker Symbol", type: "text", val: "AAPL" },
+          { id: "filing", label: "Filing Type", type: "select", options: ["10-K (Annual)", "10-Q (Quarterly)"], val: "10-K (Annual)" }
+        ],
+        metrics: [
+          { title: "Health Grade", value: "Grade A-", sub: "High Cash Flow" },
+          { title: "Current Ratio", value: "0.99", sub: "Industry Median: 1.20" },
+          { title: "Debt to Equity", value: "1.53", sub: "Healthy Leverage" },
+          { title: "Total Equity", value: "$ 62.1 B", sub: "Shareholders Equity" }
+        ],
+        logs: [
+          { tag: "INFO", cls: "tag-info", text: "Initiating SEC EDGAR submissions API handshake for ticker AAPL..." },
+          { tag: "INGEST", cls: "tag-action", text: "Retrieved 10-K Annual Report HTML filing (Form 10-K FY 2025)" },
+          { tag: "PARSE", cls: "tag-perceive", text: "Extracted Consolidated Balance Sheet: Assets, Liabilities, Equity" },
+          { tag: "MATH", cls: "tag-info", text: "Computing GAAP financial ratios: Current, Quick, Debt-to-Equity..." },
+          { tag: "SUCCESS", cls: "tag-success", text: "Audited financial health. Grade assigned: A- (Strong liquidity)." }
+        ],
+        result: JSON.stringify({
+          ticker: "AAPL",
+          form: "10-K",
+          balance_sheet: {
+            current_assets_millions: 143713,
+            current_liabilities_millions: 145308,
+            long_term_debt_millions: 95281,
+            shareholders_equity_millions: 62146
+          },
+          ratios: {
+            current_ratio: 0.99,
+            quick_ratio: 0.84,
+            debt_to_equity: 1.53
+          },
+          health_grade: "A-"
+        }, null, 2)
+      },
+
+      "omni-research-core": {
+        title: "OmniResearch Core",
+        icon: "🔍",
+        desc: "Autonomous multi-source deep web research agent, fact synthesizer and contradiction radar.",
+        specs: "projects/omni-research-core.md",
+        controls: [
+          { id: "query", label: "Deep Research Topic", type: "text", val: "Commercial viability of solid-state battery cells for EVs by 2027" }
+        ],
+        metrics: [
+          { title: "Sources Audited", value: "14 Sources", sub: "Peer-Reviewed & Industry" },
+          { title: "Claims Isolated", value: "32 Claims", sub: "Density Metrics" },
+          { title: "Contradictions", value: "1 Found", sub: "Production Cost Spread" },
+          { title: "Confidence", value: "88.5%", sub: "High Rigor" }
+        ],
+        logs: [
+          { tag: "DISPATCH", cls: "tag-action", text: "Spawned 4 parallel query threads across technical databases..." },
+          { tag: "INGEST", cls: "tag-info", text: "Fetched 14 technical reports and laboratory whitepapers." },
+          { tag: "EXTRACT", cls: "tag-perceive", text: "Extracted 32 verifiable assertions regarding energy density." },
+          { tag: "RADAR", cls: "tag-warn", text: "Contradiction detected: Cell cost projections diverge ($115 vs $180 / kWh)." },
+          { tag: "SUCCESS", cls: "tag-success", text: "Synthesized source-attributed executive dossier in markdown format." }
+        ],
+        result: JSON.stringify({
+          topic: "Commercial viability of solid-state battery cells for EVs by 2027",
+          sources_analyzed: 14,
+          consensus: "Initial luxury deployments in 2026-2027; mass market by 2030.",
+          divergences: [
+            { metric: "Cell Cost", source_a: "$115/kWh", source_b: "$180/kWh", variance: "High" }
+          ]
+        }, null, 2)
+      },
+
+      "flow-rpa-core": {
+        title: "FlowRPA Core",
+        icon: "⚡",
+        desc: "Enterprise browser RPA with intelligent self-healing selector fallback algorithms.",
+        specs: "projects/flow-rpa-core.md",
+        controls: [
+          { id: "flow", label: "Workflow Script", type: "select", options: ["enterprise_invoice_flow.json", "b2b_vendor_sync.json"], val: "enterprise_invoice_flow.json" }
+        ],
+        metrics: [
+          { title: "Completed Steps", value: "5 / 5", sub: "100% Success" },
+          { title: "Self-Healed", value: "1 Step", sub: "Auto-Recovered" },
+          { title: "Match Confidence", value: "96.2%", sub: "Levenshtein Distance" },
+          { title: "Downtime Prevented", value: "Zero Fail", sub: "Enterprise Ready" }
+        ],
+        logs: [
+          { tag: "STEP 1", cls: "tag-action", text: "Navigate to https://portal.internal.corp/invoicing ... [OK]" },
+          { tag: "STEP 2", cls: "tag-action", text: "Fill input '#username-field' with 'finance_agent' ... [OK]" },
+          { tag: "WARN", cls: "tag-warn", text: "Step 3: Primary selector '#btn-submit-v2' NOT FOUND on page!" },
+          { tag: "HEAL", cls: "tag-match", text: "Analyzing DOM neighborhood: located matching button (96.2% confidence)" },
+          { tag: "STEP 4", cls: "tag-action", text: "Click auto-healed button '//button[contains(.,'Submit Invoice')]' ... [OK]" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Workflow concluded successfully. Transaction ID: INV-902381" }
+        ],
+        result: JSON.stringify({
+          workflow: "enterprise_invoice_flow.json",
+          total_steps: 5,
+          healed_steps: 1,
+          healed_details: {
+            original_selector: "#btn-submit-v2",
+            healed_xpath: "//button[contains(.,'Submit Invoice')]",
+            confidence: "96.2%"
+          }
+        }, null, 2)
+      },
+
+      "cyber-probe-ai": {
+        title: "CyberProbe AI",
+        icon: "🔒",
+        desc: "OWASP HTTP security header auditor, cookie security scanner, and server hardening advisor.",
+        specs: "projects/cyber-probe-ai.md",
+        controls: [
+          { id: "target", label: "Target Domain / URL", type: "text", val: "https://insecure-portal.example.com" }
+        ],
+        metrics: [
+          { title: "Hardening Score", value: "54 / 100", sub: "Grade D" },
+          { title: "Critical Flaws", value: "2 Detected", sub: "Missing CSP & Cookie" },
+          { title: "Server Header", value: "Disclosed", sub: "nginx/1.18.0" },
+          { title: "Hardening Patch", value: "Generated", sub: "security.conf" }
+        ],
+        logs: [
+          { tag: "PROBE", cls: "tag-info", text: "Dispatching TLS/HTTP inspector probe to target URL..." },
+          { tag: "HEADER", cls: "tag-warn", text: "FAIL: Content-Security-Policy header is missing" },
+          { tag: "COOKIE", cls: "tag-warn", text: "FAIL: Cookie 'session_token' missing 'HttpOnly' flag" },
+          { tag: "BANNER", cls: "tag-warn", text: "LEAK: Server header exposes exact version 'nginx/1.18.0'" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Audit complete. Score: 54/100 (Grade D). Hardening snippet generated." }
+        ],
+        result: JSON.stringify({
+          target: "https://insecure-portal.example.com",
+          grade: "D",
+          score: 54,
+          findings: [
+            { header: "Content-Security-Policy", status: "MISSING", severity: "HIGH" },
+            { cookie: "session_token", status: "MISSING_HTTPONLY", severity: "HIGH" },
+            { banner: "Server", leaked: "nginx/1.18.0", severity: "LOW" }
+          ]
+        }, null, 2)
+      },
+
+      "aero-route-agent": {
+        title: "AeroRoute Agent",
+        icon: "✈️",
+        desc: "Multi-hop flight route explorer and Pareto layover optimization engine.",
+        specs: "projects/aero-route-agent.md",
+        controls: [
+          { id: "origin", label: "Origin Airport (IATA)", type: "text", val: "SFO" },
+          { id: "dest", label: "Destination Airport (IATA)", type: "text", val: "TYO" }
+        ],
+        metrics: [
+          { title: "Pareto Winner", value: "Option #2", sub: "$685 (Balanced ⭐)" },
+          { title: "Savings vs Direct", value: "$ 435.00", sub: "38.8% Discount" },
+          { title: "Duration Penalty", value: "+ 3h 25m", sub: "Acceptable Trade-off" },
+          { title: "Layover Risk", value: "0.12 (Low)", sub: "Incheon (ICN)" }
+        ],
+        logs: [
+          { tag: "GRAPH", cls: "tag-info", text: "Traversing flight network graph from SFO to TYO (max 2 layovers)..." },
+          { tag: "EVAL", cls: "tag-action", text: "Evaluating 48 potential routing permutations..." },
+          { tag: "PARETO", cls: "tag-match", text: "Pruning dominated flight itineraries across time and price..." },
+          { tag: "SELECT", cls: "tag-success", text: "Identified optimal balanced Pareto route: SFO ➔ ICN ➔ NRT ($685, 14h 50m)" },
+          { tag: "SUCCESS", cls: "tag-success", text: "Complete Pareto frontier table rendered." }
+        ],
+        result: JSON.stringify({
+          route: "SFO -> TYO",
+          optimal_option: {
+            routing: "SFO -> ICN -> NRT",
+            duration: "14h 50m",
+            fare_usd: 685.00,
+            savings_vs_direct: "$435.00",
+            category: "BALANCED_PARETO_OPTIMAL"
+          }
+        }, null, 2)
+      },
+
+      "clean-dom-crawler": {
+        title: "CleanDOM Crawler",
+        icon: "🧹",
+        desc: "High-performance semantic web scraper and RAG markdown token chunker.",
+        specs: "projects/clean-dom-crawler.md",
+        controls: [
+          { id: "url", label: "Documentation Webpage URL", type: "text", val: "https://docs.example.com/deep-dive" },
+          { id: "chunkSize", label: "Max Tokens per Chunk", type: "number", val: "400" }
+        ],
+        metrics: [
+          { title: "Boilerplate Cut", value: "84.2%", sub: "Nav, Ads & Cruft" },
+          { title: "Semantic Tokens", value: "2,140 Tok", sub: "Clean Content" },
+          { title: "Generated Chunks", value: "6 Chunks", sub: "50-Token Overlap" },
+          { title: "RAG Efficiency", value: "+ 91.2%", sub: "Token Cost Savings" }
+        ],
+        logs: [
+          { tag: "INGEST", cls: "tag-info", text: "Fetched 142 KB raw HTML document..." },
+          { tag: "STRIP", cls: "tag-action", text: "Stripped navbars, footers, advertisement iframes, and cookie dialogs." },
+          { tag: "PRESERVE", cls: "tag-match", text: "Preserved 4 fenced code blocks and 2 mathematical KaTeX blocks." },
+          { tag: "CHUNK", cls: "tag-info", text: "Partitioned clean markdown into 6 context-bounded RAG chunks..." },
+          { tag: "SUCCESS", cls: "tag-success", text: "RAG payload ready in clean_rag_payload.json (Tokens saved: 91.2%)." }
+        ],
+        result: JSON.stringify({
+          raw_html_bytes: 145408,
+          clean_markdown_bytes: 8420,
+          semantic_chunks: 6,
+          token_reduction: "91.2%",
+          sample_chunk_1: "Memory virtualization abstracts physical RAM into contiguous virtual address spaces..."
+        }, null, 2)
+      },
+
+      "ui-test-forge": {
+        title: "UITest Forge",
+        icon: "🛠️",
+        desc: "Autonomous web UI bug hunter and standalone Pytest test script synthesizer.",
+        specs: "projects/ui-test-forge.md",
+        controls: [
+          { id: "appUrl", label: "Target Application URL", type: "text", val: "https://portal.example.com" },
+          { id: "framework", label: "Test Framework Target", type: "select", options: ["Pytest + Playwright", "Jest + Playwright"], val: "Pytest + Playwright" }
+        ],
+        metrics: [
+          { title: "Indexed Nodes", value: "48 Elements", sub: "Forms & Controls" },
+          { title: "Defects Found", value: "2 Defects", sub: "Unclickable & Missing" },
+          { title: "Synthesized Tests", value: "4 Test Cases", sub: "Production Ready" },
+          { title: "CI Integration", value: "100% Offline", sub: "Zero-Flake" }
+        ],
+        logs: [
+          { tag: "CRAWL", cls: "tag-info", text: "Scanning web DOM for forms, inputs, buttons, and anchors..." },
+          { tag: "AUDIT", cls: "tag-warn", text: "DEFECT-01: <button id='reset-btn'> has zero clickable bounding box." },
+          { tag: "AUDIT", cls: "tag-warn", text: "DEFECT-02: <input id='org-code'> lacks associated accessible label." },
+          { tag: "SYNTH", cls: "tag-match", text: "Synthesizing executable Pytest test cases into tests/test_portal.py..." },
+          { tag: "SUCCESS", cls: "tag-success", text: "4 Pytest test functions generated and ready for CI/CD pipeline." }
+        ],
+        result: `# Synthesized Pytest Script Preview
+import pytest
+from playwright.sync_api import Page, expect
+
+def test_portal_elements_functional(page: Page):
+    page.goto("https://portal.example.com")
+    org_input = page.locator("#org-code")
+    expect(org_input).to_be_visible()
+    org_input.fill("CORP-9981")
+    submit_btn = page.locator("button[type='submit']")
+    expect(submit_btn).to_be_enabled()
+    submit_btn.click()
+`
+      }
+    };
+
+    let activeProjectKey = "autonomous-web-agent";
+
+    function selectProject(key) {
+      activeProjectKey = key;
+      const p = projects[key];
+
+      // Update Nav
+      document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-id") === key);
+      });
+
+      // Update Header
+      document.getElementById("projectTitle").innerHTML = `<span>${p.icon}</span> ${p.title}`;
+      document.getElementById("projectDesc").innerText = p.desc;
+      document.getElementById("specsLink").setAttribute("href", p.specs);
+
+      // Render Controls
+      const controlsContainer = document.getElementById("controlsContainer");
+      controlsContainer.innerHTML = p.controls.map(c => {
+        if (c.type === "select") {
+          return `
+            <div class="form-group">
+              <label>${c.label}</label>
+              <select class="form-control" id="${c.id}">
+                ${c.options.map(opt => `<option value="${opt}" ${opt === c.val ? 'selected' : ''}>${opt}</option>`).join("")}
+              </select>
+            </div>
+          `;
+        }
+        return `
+          <div class="form-group">
+            <label>${c.label}</label>
+            <input class="form-control" id="${c.id}" type="${c.type}" value="${c.val}">
+          </div>
+        `;
+      }).join("");
+
+      // Render Metrics
+      const metricsGrid = document.getElementById("metricsGrid");
+      metricsGrid.innerHTML = p.metrics.map(m => `
+        <div class="metric-card">
+          <div class="title">${m.title}</div>
+          <div class="value">${m.value}</div>
+          <div class="subtitle">${m.sub}</div>
+        </div>
+      `).join("");
+
+      // Reset Terminal
+      const terminal = document.getElementById("terminal");
+      terminal.innerHTML = `<div class="log-line"><span class="log-time">[00:00:00]</span> <span class="log-tag tag-info">READY</span> <span>Working model initialized. Click 'Run Live Simulation' above to execute.</span></div>`;
+
+      // Hide Result Box
+      const resBox = document.getElementById("resultBox");
+      resBox.style.display = "none";
+      resBox.innerText = "";
+    }
+
+    function runSimulation() {
+      const p = projects[activeProjectKey];
+      const terminal = document.getElementById("terminal");
+      const resBox = document.getElementById("resultBox");
+      const timer = document.getElementById("execTimer");
+      terminal.innerHTML = "";
+      resBox.style.display = "none";
+
+      const btn = document.getElementById("runBtn");
+      btn.disabled = true;
+      btn.innerText = "⏳ Executing...";
+
+      let step = 0;
+      const startTime = Date.now();
+      const interval = setInterval(() => {
+        if (step < p.logs.length) {
+          const l = p.logs[step];
+          const now = new Date();
+          const timeStr = `[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
+          const line = document.createElement("div");
+          line.className = "log-line";
+          line.innerHTML = `<span class="log-time">${timeStr}</span> <span class="log-tag ${l.cls}">${l.tag}</span> <span>${l.text}</span>`;
+          terminal.appendChild(line);
+          terminal.scrollTop = terminal.scrollHeight;
+          step++;
+          timer.innerText = ((Date.now() - startTime) / 1000).toFixed(1) + "s";
+        } else {
+          clearInterval(interval);
+          btn.disabled = false;
+          btn.innerText = "▶ Re-Run Simulation";
+          resBox.style.display = "block";
+          resBox.innerText = p.result;
+        }
+      }, 350);
+    }
+
+    // Attach Click Handlers
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.addEventListener("click", () => {
+        selectProject(item.getAttribute("data-id"));
+      });
+    });
+
+    // Check URL Hash for Deep Linking
+    window.addEventListener("load", () => {
+      const hash = window.location.hash.replace("#", "");
+      if (hash && projects[hash]) {
+        selectProject(hash);
+      } else {
+        selectProject("autonomous-web-agent");
+      }
+    });
+  </script>
+</body>
+</html>
