@@ -1269,11 +1269,68 @@ def generate_pytest_suite(indexed_elements: list[Element]):
       }
     }
 
-    // Initialize
+    // Keyboard Navigation & Shortcuts (Issue #2 & #8)
+    window.addEventListener("keydown", (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      const filtered = currentFilter === "all" ? projectsData : projectsData.filter(p => p.category === currentFilter);
+      const currIdx = filtered.findIndex(p => p.id === currentProject.id);
+
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+        const nextIdx = (currIdx + 1) % filtered.length;
+        selectProject(filtered[nextIdx].id);
+        e.preventDefault();
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+        const prevIdx = (currIdx - 1 + filtered.length) % filtered.length;
+        selectProject(filtered[prevIdx].id);
+        e.preventDefault();
+      }
+    });
+
+    // Touch Swipe Support for Mobile (Issue #4)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    window.addEventListener("touchstart", (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    window.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      if (Math.abs(diff) > 60) {
+        const filtered = currentFilter === "all" ? projectsData : projectsData.filter(p => p.category === currentFilter);
+        const currIdx = filtered.findIndex(p => p.id === currentProject.id);
+        if (diff < 0) {
+          selectProject(filtered[(currIdx + 1) % filtered.length].id);
+        } else {
+          selectProject(filtered[(currIdx - 1 + filtered.length) % filtered.length].id);
+        }
+      }
+    }, { passive: true });
+
+    // Copy to Clipboard Helper (Issue #6)
+    function copySnippet(text, btnElement) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = btnElement.innerText;
+        btnElement.innerText = "✓ Copied!";
+        setTimeout(() => { btnElement.innerText = originalText; }, 2000);
+      });
+    }
+
+    // Save Selection to LocalStorage (Issue #3)
+    const origSelectProject = selectProject;
+    selectProject = function(id) {
+      origSelectProject(id);
+      try {
+        localStorage.setItem("prajwal_portfolio_active_id", id);
+      } catch (err) {}
+    };
+
+    // Initialize with LocalStorage & Hash Fallbacks
     window.addEventListener("load", () => {
       const hash = window.location.hash.replace("#", "");
-      if (hash) {
-        const found = projectsData.find(p => p.id === hash);
+      let cachedId = null;
+      try { cachedId = localStorage.getItem("prajwal_portfolio_active_id"); } catch(e) {}
+      
+      const targetId = hash || cachedId;
+      if (targetId) {
+        const found = projectsData.find(p => p.id === targetId);
         if (found) currentProject = found;
       }
       renderProjectsList();
